@@ -24,8 +24,6 @@ const Utilisateur = database.define('Utilisateur', {
     province: DataTypes.STRING,
     pays: DataTypes.STRING,
     code_postale: DataTypes.STRING,
-}, {
-    timestamps: false,
 });
 
 export default Utilisateur;

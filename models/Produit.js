@@ -20,8 +20,6 @@ const Produit = database.define('Produit', {
     description: DataTypes.STRING,
     quantite_stock: DataTypes.INTEGER,
     date_expiration: DataTypes.DATE,
-}, {
-    timestamps: false,
 });
 
 export default Produit;

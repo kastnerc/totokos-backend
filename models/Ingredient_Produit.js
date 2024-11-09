@@ -19,8 +19,6 @@ const Ingredient_Produit = database.define('Ingredient_Produit', {
         },
     },
     quantite: DataTypes.DECIMAL,
-}, {
-    timestamps: false,
 });
 
 export default Ingredient_Produit;

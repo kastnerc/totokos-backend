@@ -11,8 +11,6 @@ const Fournisseur = database.define('Fournisseur', {
     adresse_fournisseur: DataTypes.STRING,
     contact_telephone: DataTypes.STRING,
     email_fournisseur: DataTypes.STRING,
-}, {
-    timestamps: false,
 });
 
 export default Fournisseur;

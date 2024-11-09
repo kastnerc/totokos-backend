@@ -21,8 +21,6 @@ const Commande_Produit = database.define('Commande_Produit', {
     quantite: DataTypes.INTEGER,
     prix_unitaire: DataTypes.DECIMAL,
     prix_total_produit: DataTypes.DECIMAL,
-}, {
-    timestamps: false,
 });
 
 export default Commande_Produit;
