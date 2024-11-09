@@ -1,4 +1,4 @@
-import { User } from '../relationships/Relations.js'
+import { User } from '../relationships/relations.js'
 
 // 
 export const getAllUsers = async (req, res) => {

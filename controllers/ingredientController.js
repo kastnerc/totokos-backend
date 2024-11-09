@@ -1,3 +1,3 @@
-import { Ingredient } from '../relationships/Relations.js'
+import { Ingredient } from '../relationships/relations.js'
 
 //fonctions

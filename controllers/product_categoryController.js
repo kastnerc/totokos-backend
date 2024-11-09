@@ -1,3 +1,3 @@
-import { Product_Category } from '../relationships/Relations.js'
+import { Product_Category } from '../relationships/relations.js'
 
 //fonctions

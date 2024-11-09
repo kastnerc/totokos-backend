@@ -1,3 +1,3 @@
-import { Order_Product } from '../relationships/Relations.js'
+import { Order_Product } from '../relationships/relations.js'
 
 //fonctions

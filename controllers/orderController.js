@@ -1,3 +1,3 @@
-import { Order } from '../relationships/Relations.js'
+import { Order } from '../relationships/relations.js'
 
 //fonctions

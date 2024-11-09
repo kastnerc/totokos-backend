@@ -1,3 +1,3 @@
-import { Supplier } from '../relationships/Relations.js'
+import { Supplier } from '../relationships/relations.js'
 
 //fonctions
