@@ -5,20 +5,22 @@ import compression from "compression";
 import bodyParser from "body-parser";
 import dotenv from 'dotenv'
 
-//Creation du serveur
+// Start the connection
 const app = express()
 
-//Utiliser les librairies
+// Use of middlewares
 app.use(cors())
 app.use(helmet())
 app.use(compression())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// Creation de toutes les tables
+// Creation of the tables
 // database.sync({ force:true })
 
-//Demarrer les serveur
+// Import of the routes
+
+// Start the server
 const PORT = dotenv.config().parsed.PORT
 
 app.listen(PORT, () => console.log(`The server is running on port ${PORT}`))

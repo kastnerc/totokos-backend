@@ -1,9 +1,9 @@
-import database from "../config/connection.js";
+import database from "../config/database.js";
 import { DataTypes } from "sequelize";
 import Ingredient from "./Ingredient.js";
-import Produit from "./Produit.js";
+import Product from "./Product.js";
 
-const Ingredient_Produit = database.define('Ingredient_Produit', {
+const Ingredient_Product = database.define('Ingredient_Product', {
     id_ingredient: {
         type: DataTypes.INTEGER,
         references: {
@@ -11,14 +11,14 @@ const Ingredient_Produit = database.define('Ingredient_Produit', {
             key: 'id_ingredient',
         },
     },
-    id_produit: {
+    id_product: {
         type: DataTypes.INTEGER,
         references: {
-            model: Produit,
-            key: 'id_produit',
+            model: Product,
+            key: 'id_product',
         },
     },
-    quantite: DataTypes.DECIMAL,
+    quantity: DataTypes.DECIMAL,
 });
 
-export default Ingredient_Produit;
+export default Ingredient_Product;

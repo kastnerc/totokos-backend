@@ -1,4 +1,3 @@
-//Liste des departements
-import { Ingredient } from '../models/relations.js'
+import { Ingredient } from '../relationships/Relations.js'
 
 //fonctions
