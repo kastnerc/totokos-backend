@@ -20,8 +20,6 @@ const Ingredient = database.define('Ingredient', {
     date_expiration: DataTypes.DATE,
     prix_par_unite: DataTypes.DECIMAL,
     unite_mesure: DataTypes.STRING,
-}, {
-    timestamps: false,
 });
 
 export default Ingredient;

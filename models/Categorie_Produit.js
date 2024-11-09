@@ -9,8 +9,6 @@ const Categorie_Produit = database.define('Categorie_Produit', {
     },
     nom_categorie: DataTypes.STRING,
     description_categorie: DataTypes.STRING,
-}, {
-    timestamps: false,
 });
 
 export default Categorie_Produit;
