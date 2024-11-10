@@ -7,7 +7,7 @@ route.get('/', getProductCategories)
 .get('/:id', getProductCategoryById)
 .get('/:id/categories', listProductsByCategory)
 .post('/', addProductCategory)
-.patch('/', updateProductCategory)
-.delete('/', deleteProductCategory)
+.patch('/:id', updateProductCategory)
+.delete('/:id', deleteProductCategory)
 
 export default route

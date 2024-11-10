@@ -7,8 +7,8 @@ route.get('/', getOrders)
 .get('/:id', getOrderById)
 .get('/:id/product', getProductInfoByOrderId)
 .post('/', createOrder)
-.patch('/', updateOrder)
-.delete('/', deleteOrder)
+.patch('/:id', updateOrder)
+.delete('/:id', deleteOrder)
 .delete('/:id/product', deleteProductFromOrder)
 
 export default route

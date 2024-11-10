@@ -17,7 +17,6 @@ const User = database.define('user', {
         unique: true,
     },
     role: DataTypes.STRING,
-    creation_date: DataTypes.DATE,
     last_connection_date: DataTypes.DATE,
     address: DataTypes.STRING,
     city: DataTypes.STRING,

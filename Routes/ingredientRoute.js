@@ -6,7 +6,7 @@ const route = Router()
 route.get('/', getIngredients)
 .get('/:id',getIngredientById)
 .post('/', addIngredient)
-.patch('/', updateIngredient)
-.delete('/', deleteIngredient)
+.patch('/:id', updateIngredient)
+.delete('/:id', deleteIngredient)
 
 export default route

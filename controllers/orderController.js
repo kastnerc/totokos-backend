@@ -25,7 +25,7 @@ export const deleteOrder = async (req, res) => {
     const { id } = req.params
     try {
         // Delete the order where the id matches
-        const order = await Order.destroy({ where: { id } })
+        const order = await Order.destroy({ where: { id_order: id } })
         res.status(200).json(order)
     } catch (error) {
         res.status(400).json({ message: error })
@@ -33,26 +33,57 @@ export const deleteOrder = async (req, res) => {
 }
 
 export const createOrder = async (req, res) => {
-    const { userId, products } = req.body;
+    // Retrieve the new orders' information (array of order objects)
+    const orders = req.body;
+
+    // Validate if the input is an array and it's not empty
+    if (!Array.isArray(orders) || orders.length === 0) {
+        return res.status(400).json({ message: "No orders provided or invalid data format." });
+    }
 
     try {
-        // Create a new order with the provided userId
-        const order = await Order.create({ userId });
-        // Add products to the order
-        for (const product of products) {
-            const { productId, quantity } = product;
-            await Order_Product.create({
-                orderId: order.id,
-                productId,
-                quantity
-            });
+        // Create each order and associate products
+        const createdOrders = [];
+        for (const order of orders) {
+            const { userId, products } = order;
+
+            // Validate presence of userId and products
+            if (!userId || !Array.isArray(products) || products.length === 0) {
+                console.log("Missing userId or products in order:", order);
+                continue; // Skip this order if missing required fields
+            }
+
+            // Create the order with the userId
+            const newOrder = await Order.create({ userId });
+            
+            // Add each product to the order
+            for (const product of products) {
+                const { productId, quantity } = product;
+                
+                // Validate required fields for each product
+                if (!productId || !quantity) {
+                    console.log("Missing productId or quantity for product:", product);
+                    continue; // Skip this product if any required fields are missing
+                }
+
+                // Add the product to the order
+                await Order_Product.create({
+                    orderId: newOrder.id,
+                    productId,
+                    quantity
+                });
+            }
+
+            createdOrders.push(newOrder); // Add the created order to the response
         }
 
-        res.status(201).json({ message: 'Order created successfully', order });
+        // Respond with the created orders
+        res.status(201).json({ data: createdOrders, message: "Orders created successfully" });
     } catch (error) {
+        console.log('Error during order creation:', error);
         res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const getProductInfoByOrderId = async (req, res) => {
     const { orderId } = req.params;
@@ -70,35 +101,14 @@ export const getProductInfoByOrderId = async (req, res) => {
 }
 
 export const updateOrder = async (req, res) => {
-    const { orderId } = req.params;
-    const { userId, products } = req.body;
-
+    const { id } = req.params
+    const updatedOrder = req.body
     try {
-        // Fetch the order by its primary key (id)
-        const order = await Order.findByPk(orderId);
-
-        // Update the userId if provided
-        if (userId) {
-            order.userId = userId;
-        }
-        await order.save();
-
-        // Update the products in the order
-        if (products && products.length > 0) {
-            await Order_Product.destroy({ where: { orderId: order.id } });
-            for (const product of products) {
-                const { productId, quantity } = product;
-                await Order_Product.create({
-                    orderId: order.id,
-                    productId,
-                    quantity
-                });
-            }
-        }
-
-        res.status(200).json({ message: 'Order updated successfully', order });
+        // Update the order with the provided data where the id matches
+        const order = await Order.update({ updatedOrder }, { where: { id_order: id } })
+        res.status(200).json(order)
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error })
     }
 }
 

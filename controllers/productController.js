@@ -35,22 +35,45 @@ export const getProductById = async (req, res) => {
 }
 
 export const addProduct = async (req, res) => {
-    const { name, price, description, stock, expiry_date, id_category } = req.body;
+    // Retrieve the new products' information (array of product objects)
+    const products = req.body;
+
+    // Validate if the input is an array and it's not empty
+    if (!Array.isArray(products) || products.length === 0) {
+        return res.status(400).json({ message: "No products provided or invalid data format." });
+    }
+
     try {
-        // Create a new product with the provided data
-        const product = await Product.create({ name, price, description, stock, expiry_date, id_category });
-        res.status(201).json(product);
+        // Create each product
+        const createdProducts = [];
+        for (const product of products) {
+            const { name, price, description, stock, expiry_date, id_category } = product;
+
+            // Validate necessary fields
+            if (!name || price == null || !description || stock == null || !expiry_date || !id_category) {
+                console.log("Missing required fields for product:", name);
+                continue; // Skip this product if any field is missing
+            }
+
+            // Create the product in the database
+            const result = await Product.create({ name, price, description, stock, expiry_date, id_category });
+            createdProducts.push(result);
+        }
+
+        // Respond with the created products
+        res.status(201).json({ data: createdProducts, message: "Products successfully created" });
     } catch (error) {
+        console.log('Error during product creation:', error);
         res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
     const { name, price, description, stock, expiry_date, id_category } = req.body;
     try {
         // Update the product with the provided data where the id matches
-        const product = await Product.update({ name, price, description, stock, expiry_date, id_category }, { where: { id } });
+        const product = await Product.update({ name, price, description, stock, expiry_date, id_category }, { where: { id_product: id } });
         res.status(200).json(product);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -61,7 +84,7 @@ export const deleteProduct = async (req, res) => {
     const { id } = req.params;
     try {
         // Delete the product where the id matches
-        const product = await Product.destroy({ where: { id } });
+        const product = await Product.destroy({ where: { id_product: id } });
         res.status(200).json(product);
     } catch (error) {
         res.status(400).json({ message: error.message });

@@ -6,7 +6,7 @@ const route = Router()
 route.get('/', getSuppliers)
 .get('/:id', getSupplierById)
 .post('/', addSupplier)
-.patch('/', updateSupplier)
-.delete('/', deleteSupplier)
+.patch('/:id', updateSupplier)
+.delete('/:id', deleteSupplier)
 
 export default route
