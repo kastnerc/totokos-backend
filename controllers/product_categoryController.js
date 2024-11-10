@@ -1,4 +1,4 @@
-import { Product_Category } from '../relationships/relations.js'
+import { Product_Category } from '../relationships/Relations.js'
 
 // Get all product categories
 export const getProductCategories = async (req, res) => {

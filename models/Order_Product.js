@@ -4,7 +4,7 @@ import Order from "./Order.js";
 import Product from "./Product.js";
 
 const Order_Product = database.define('Order_Product', {
-    id_Order: {
+    id_order: {
         type: DataTypes.INTEGER,
         references: {
             model: Order,

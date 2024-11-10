@@ -2,12 +2,12 @@ import database from "../config/database.js";
 import { DataTypes } from "sequelize";
 
 const Price_History = database.define('Price_History', {
-    id: {
+    id_price_history: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    productId: {
+    id_product: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

@@ -1,4 +1,4 @@
-import { Product } from '../relationships/relations.js'
+import { Product, Ingredient, Ingredient_Product } from '../relationships/Relations.js'
 
 // Get all products (only the name and the price)
 export const getProducts = async (req, res) => {
@@ -66,6 +66,8 @@ export const deleteProduct = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 }
+
+
 export const listIngredientsByProduct = async (req, res) => {
     const { productId } = req.params;
 
@@ -78,6 +80,7 @@ export const listIngredientsByProduct = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 }
+
 
 export const listIngredientsByProductId = async (req, res) => {
     const { productId } = req.params;
@@ -92,6 +95,8 @@ export const listIngredientsByProductId = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+
 export const listPriceHistoryByProductId = async (req, res) => {
     const { productId } = req.params;
 
@@ -110,37 +115,6 @@ export const listPriceHistoryByProductId = async (req, res) => {
     }
 }
 
-export const createProduct = async (req, res) => {
-    const { product_name, product_price, description, stock, expiry_date, id_category } = req.body;
-
-    try {
-        const product = await Product.create({ product_name, product_price, description, stock, expiry_date, id_category });
-        res.status(201).json({ data: product });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
-
-export const updateProduct = async (req, res) => {
-    const { productId } = req.params;
-    const { product_name, product_price, description, stock, expiry_date, id_category } = req.body;
-
-    try {
-        const product = await Product.findByPk(productId);
-
-        product.product_name = product_name;
-        product.product_price = product_price;
-        product.description = description;
-        product.stock = stock;
-        product.expiry_date = expiry_date;
-        product.id_category = id_category;
-        await product.save();
-
-        res.status(200).json({ data: product });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
 
 export const addIngredientToProduct = async (req, res) => {
     const { productId, ingredientId, quantity } = req.body;
@@ -171,6 +145,7 @@ export const addIngredientToProduct = async (req, res) => {
         
     }
 }
+
 // Fonction pour mettre à jour l'ingrédient d'un produit
 export const updateIngredientOfProduct = async (req, res) => {
     const { productId, ingredientId } = req.params;
@@ -192,7 +167,7 @@ export const updateIngredientOfProduct = async (req, res) => {
     }
 }
 
-// Fonction pour supprimer l'ingrédient d'un produit
+// Delete ingredient from product
 export const deleteIngredientFromProduct = async (req, res) => {
     const { productId, ingredientId } = req.params;
 

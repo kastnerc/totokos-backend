@@ -1,4 +1,4 @@
-import { Order } from '../relationships/relations.js'
+import { Order, Order_Product, Product } from '../relationships/Relations.js'
 
 // Get all orders
 export const getOrders = async (req, res) => {
@@ -31,6 +31,8 @@ export const deleteOrder = async (req, res) => {
         res.status(400).json({ message: error })
     }
 }
+
+// Create an order
 export const createOrder = async (req, res) => {
     const { userId, products } = req.body;
 
@@ -50,29 +52,8 @@ export const createOrder = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-export const getOrderById = async (req, res) => {
-    const { orderId } = req.params;
 
-    try {
-        // Find the order by ID
-        const order = await Order.findByPk(orderId, {
-            include: [
-                {
-                    model: Order_Product,
-                    include: [Product]
-                }
-            ]
-        });
-
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-
-        res.status(200).json({ data: order });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-}
+// Get all products from order, by id
 export const getProductInfoByOrderId = async (req, res) => {
     const { orderId } = req.params;
 
@@ -86,6 +67,7 @@ export const getProductInfoByOrderId = async (req, res) => {
     }
 }
 
+// Update an order
 export const updateOrder = async (req, res) => {
     const { orderId } = req.params;
     const { userId, products } = req.body;

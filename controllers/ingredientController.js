@@ -1,4 +1,4 @@
-import { Ingredient } from '../relationships/relations.js'
+import { Ingredient } from '../relationships/Relations.js'
 
 // Get all ingredients
 export const getIngredients = async (req, res) => {

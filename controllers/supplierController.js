@@ -1,4 +1,4 @@
-import { Supplier } from '../relationships/relations.js'
+import { Supplier } from '../relationships/Relations.js'
 
 // Get all suppliers
 export const getSuppliers = async (req, res) => {
