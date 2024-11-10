@@ -54,3 +54,17 @@ export const deleteProductCategory = async (req, res) => {
         res.status(400).json({ message: error })
     }
 }
+export const listProductsByCategory = async (req, res) => {
+    // Retrieve the category ID from the URL
+    const { categoryId } = req.params;
+
+    try {
+        const category = await Product_Category.findByPk(categoryId);
+
+        const products = await category.getProducts();
+
+        res.status(200).json({ data: products });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}

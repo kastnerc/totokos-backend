@@ -75,3 +75,23 @@ export const updateUser = async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 }
+export const listOrdersByUser = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const user = await User.findByPk(userId);
+
+        const orders = await user.getOrders({
+            include: [
+                {
+                    model: Order_Product,
+                    include: [Product]
+                }
+            ]
+        });
+
+        res.status(200).json({ data: orders });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}

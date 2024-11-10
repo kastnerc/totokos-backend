@@ -1,25 +1,29 @@
 import database from "../config/database.js";
 import { DataTypes } from "sequelize";
-import Product from "./Product.js";
 
 const Price_History = database.define('Price_History', {
-    id_price_history: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    id_product: {
+    productId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         references: {
-            model: Product,
-            key: 'id_product',
-        },
+            model: 'Products',
+            key: 'id_product'
+        }
     },
-    old_price: DataTypes.DECIMAL,
-    new_price: DataTypes.DECIMAL,
-    change_date: DataTypes.DATE,
-}, {
-    timestamps: false,
+    price: {
+        type: DataTypes.DECIMAL,
+        allowNull: false
+    },
+    date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    }
 });
 
 export default Price_History;

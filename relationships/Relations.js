@@ -35,4 +35,10 @@ Ingredient.belongsTo(Supplier)
 
 Supplier.hasMany(Ingredient)
 
+Product.belongsToMany(Ingredient, { through: Ingredient_Product });
+Ingredient.belongsToMany(Product, { through: Ingredient_Product });
+
+Product.belongsToMany(Order, { through: Order_Product });
+Order.belongsToMany(Product, { through: Order_Product });
+
 export {User, Order, Order_Product, Product, Product_Category, Ingredient, Ingredient_Product, Supplier, Price_History}
