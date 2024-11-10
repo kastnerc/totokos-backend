@@ -30,7 +30,7 @@ app.use('/api/ingredient', ingredientRoute)
 app.use('/api/order', orderRoute)
 app.use('/api/product_category', product_categoryRoute)
 app.use('/api/product', productRoute)
-app.use('api/supplier', supplierRoute)
+app.use('/api/supplier', supplierRoute)
 app.use('/api/user', userRoute)
 
 
