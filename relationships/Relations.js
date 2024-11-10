@@ -35,10 +35,10 @@ Ingredient.belongsTo(Supplier)
 
 Supplier.hasMany(Ingredient)
 
-Product.belongsToMany(Ingredient, { through: Ingredient_Product });
-Ingredient.belongsToMany(Product, { through: Ingredient_Product });
+Product.belongsToMany(Ingredient, { through: Ingredient_Product, foreignKey: 'id_product', otherKey: 'id_ingredient'});
+Ingredient.belongsToMany(Product, { through: Ingredient_Product,foreignKey: 'id_ingredient', otherKey: 'id_product'  });
 
-Product.belongsToMany(Order, { through: Order_Product });
-Order.belongsToMany(Product, { through: Order_Product });
+Product.belongsToMany(Order, { through: Order_Product, foreignKey: 'id_product', otherKey: 'id_order' });
+Order.belongsToMany(Product, { through: Order_Product, foreignKey: 'id_order', otherKey: 'id_product' });
 
 export {User, Order, Order_Product, Product, Product_Category, Ingredient, Ingredient_Product, Supplier, Price_History}

@@ -10,6 +10,7 @@ const Ingredient_Product = database.define('Ingredient_Product', {
             model: Ingredient,
             key: 'id_ingredient',
         },
+        primaryKey: true,
     },
     id_product: {
         type: DataTypes.INTEGER,
@@ -17,8 +18,17 @@ const Ingredient_Product = database.define('Ingredient_Product', {
             model: Product,
             key: 'id_product',
         },
+        primaryKey: true,
     },
     quantity: DataTypes.DECIMAL,
+}, {
+    indexes: [
+        {
+            unique: true,
+            fields: ['id_ingredient', 'id_product'],
+            name: 'unique_ingredient_product'
+        }
+    ]
 });
 
 export default Ingredient_Product;

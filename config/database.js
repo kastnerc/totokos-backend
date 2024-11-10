@@ -7,6 +7,7 @@ const ENV = dotenv.config().parsed
 
 // console.log(ENV)
 
+
 // Create the database
 
 const database = new Sequelize(ENV.DB_NAME, ENV.DB_USER, ENV.DB_PASSWORD, {

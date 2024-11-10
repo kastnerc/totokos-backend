@@ -10,6 +10,7 @@ const Order_Product = database.define('Order_Product', {
             model: Order,
             key: 'id_order',
         },
+        primaryKey: true,
     },
     id_product: {
         type: DataTypes.INTEGER,
@@ -17,10 +18,19 @@ const Order_Product = database.define('Order_Product', {
             model: Product,
             key: 'id_product',
         },
+        primaryKey: true,
     },
     quantity: DataTypes.INTEGER,
     unit_price: DataTypes.DECIMAL,
     total_price: DataTypes.DECIMAL,
+}, {
+    indexes: [
+        {
+            unique: true,
+            fields: ['id_order', 'id_product'],
+            name: 'unique_order_product'
+        }
+    ]
 });
 
 export default Order_Product;
