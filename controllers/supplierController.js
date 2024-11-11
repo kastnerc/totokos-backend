@@ -60,7 +60,7 @@ export const updateSupplier = async (req, res) => {
     const { name, address, phone, email } = req.body
     try {
         // Update the supplier with the provided data where the id matches
-        const supplier = await Supplier.update({ name, address, phone, email }, { where: { id_supplier: id } })
+        const supplier = await Supplier.update({ supplier_name, supplier_address, telephone_contact, supplier_email }, { where: { id_supplier: id } })
         res.status(200).json(supplier)
     } catch (error) {
         res.status(400).json({ message: error })

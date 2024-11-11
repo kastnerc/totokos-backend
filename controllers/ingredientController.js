@@ -22,29 +22,36 @@ export const getIngredientById = async (req, res) => {
 }
 
 export const addIngredient = async (req, res) => {
-    // Retrieve the new ingredients' information (array of ingredient objects)
-    const ingredients = req.body;
+    const ingredients = req.body;  // Ensure this is an array of ingredient objects
 
-    // Validate if the input is an array and it's not empty
+    // Validate the ingredients input
     if (!Array.isArray(ingredients) || ingredients.length === 0) {
         return res.status(400).json({ message: "No ingredients provided or invalid data format." });
     }
 
     try {
-        // Create each ingredient
         const createdIngredients = [];
+        
         for (const ingredient of ingredients) {
-            const { name, stock, unit, price } = ingredient;
-
-            // Validate presence of required fields
-            if (!name || !stock || !unit || !price) {
-                console.log("Missing required fields for ingredient:", ingredient);
-                continue; // Skip this ingredient if any required fields are missing
+            const { ingredient_name, id_supplier, stock, expiry_date, price_per_unit, unit_measure } = ingredient;
+            
+            // Validate required fields
+            if (!ingredient_name || !id_supplier || !stock || !expiry_date || !price_per_unit || !unit_measure) {
+                console.log("Missing required fields for ingredient:", ingredient_name);
+                continue; // Skip if any field is missing
             }
-
-            // Create the ingredient with the provided data
-            const newIngredient = await Ingredient.create({ name, stock, unit, price });
-            createdIngredients.push(newIngredient); // Add the created ingredient to the response
+            
+            // Create the ingredient in the database
+            const result = await Ingredient.create({ 
+                ingredient_name, 
+                id_supplier, 
+                stock, 
+                expiry_date, 
+                price_per_unit, 
+                unit_measure 
+            });
+            
+            createdIngredients.push(result);
         }
 
         // Respond with the created ingredients
@@ -60,7 +67,7 @@ export const updateIngredient = async (req, res) => {
     const { name, stock, unit, price } = req.body
     try {
         // Update the ingredient with the provided data where the id matches
-        const ingredient = await Ingredient.update({ name, stock, unit, price }, { where: { id_ingredient: id } })
+        const ingredient = await Ingredient.update({ ingredient_name, stock, unit_measure, price_per_unit }, { where: { id_ingredient: id } })
         res.status(200).json(ingredient)
     } catch (error) {
         res.status(400).json({ message: error })
