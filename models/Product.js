@@ -17,20 +17,22 @@ const Product = database.define('Product', {
         },
     },
     product_name: DataTypes.STRING,
-    product_price: DataTypes.DECIMAL,
+    product_price: { // Vérifiez ici
+        type: DataTypes.DECIMAL,
+        allowNull: false,  // Facultatif mais recommandé
+    },
     description: DataTypes.STRING,
     stock: DataTypes.INTEGER,
     expiry_date: DataTypes.DATE,
 }, {
     hooks: {
         afterCreate: async (product, options) => {
-            await Price_History.create({
-                productId: product.id_product,
-                price: product.product_price,
-                date: new Date()
-            });
-        },
-        afterUpdate: async (product, options) => {
+            console.log('Product Data:', product); // Vérifiez si product_price est présent
+    
+            if (!product.product_price) {
+                throw new Error('Product price is required to create a price history entry');
+            }
+    
             await Price_History.create({
                 productId: product.id_product,
                 price: product.product_price,

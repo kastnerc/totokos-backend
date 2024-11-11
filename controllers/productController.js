@@ -91,21 +91,6 @@ export const deleteProduct = async (req, res) => {
     }
 }
 
-export const listIngredientsByProduct = async (req, res) => {
-    const { productId } = req.params;
-
-    try {
-        // Fetch the product by its primary key (id)
-        const product = await Product.findByPk(productId);
-        // Get all ingredients associated with the product
-        const ingredients = await product.getIngredients();
-
-        res.status(200).json({ data: ingredients });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-}
-
 export const listIngredientsByProductId = async (req, res) => {
     const { productId } = req.params;
 
