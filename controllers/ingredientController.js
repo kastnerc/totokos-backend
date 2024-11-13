@@ -63,25 +63,50 @@ export const addIngredient = async (req, res) => {
 };
 
 export const updateIngredient = async (req, res) => {
-    const { id } = req.params
-    const { ingredient_name, stock, unit_measure, price_per_unit } = req.body
+    // Retrieve the ingredient ID from the request parameters
+    const { id } = req.params;
+    // Retrieve the updated ingredient information from the request body
+    const updatedData = req.body;
+
     try {
         // Update the ingredient with the provided data where the id matches
-        const ingredient = await Ingredient.update({ ingredient_name, stock, unit_measure, price_per_unit }, { where: { id_ingredient: id } })
-        res.status(200).json(ingredient)
+        const [updatedRows] = await Ingredient.update(updatedData, {
+            where: { id_ingredient: id }
+        });
+
+        // Check if any rows were updated
+        if (updatedRows > 0) {
+            res.status(200).json({ message: "Ingredient updated successfully" });
+        } else {
+            res.status(404).json({ message: "Ingredient not found or no changes made" });
+        }
     } catch (error) {
-        res.status(400).json({ message: error })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const deleteIngredient = async (req, res) => {
-    const { id } = req.params
+    // Retrieve the ingredient ID from the request parameters
+    const { id } = req.params;
+
     try {
         // Delete the ingredient where the id matches
-        const ingredient = await Ingredient.destroy({ where: { id_ingredient: id } })
-        res.status(200).json(ingredient)
+        const deletedRows = await Ingredient.destroy({
+            where: { id_ingredient: id }
+        });
+
+        // Check if any rows were deleted
+        if (deletedRows > 0) {
+            res.status(200).json({ message: "Ingredient deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Ingredient not found" });
+        }
     } catch (error) {
-        res.status(400).json({ message: error })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
-}
+};
 

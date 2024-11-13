@@ -1,4 +1,4 @@
-import { Product, Ingredient, Ingredient_Product } from '../relationships/Relations.js'
+import { Product, Ingredient, Ingredient_Product, Price_History } from '../relationships/Relations.js'
 
 // Get all products (only the product_name and the product_price)
 export const getProducts = async (req, res) => {
@@ -113,6 +113,14 @@ export const updateProduct = async (req, res) => {
     try {
         // Update the product with the provided data where the id matches
         const product = await Product.update({ product_name, product_price, description, stock, expiry_date, id_category }, { where: { id_product: id } });
+
+        // Manually create a price history entry
+        await Price_History.create({
+            id_product: createdProduct.id_product,
+            price: createdProduct.product_price,
+            date: new Date()
+        });
+
         res.status(200).json(product);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -178,16 +186,18 @@ export const listPriceHistoryByProductId = async (req, res) => {
 export const addIngredientToProduct = async (req, res) => {
     const { id_product, id_ingredient, quantity } = req.body;
 
+    console.log('Request Body:', req.body); // Vérifiez le contenu de la requête
+
     try {
-        // Fetch the product by its primary key (id)
         const product = await Product.findByPk(id_product);
+        console.log('Product fetched:', product); // Vérifiez si le produit est trouvé
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Fetch the ingredient by its primary key (id)
         const ingredient = await Ingredient.findByPk(id_ingredient);
+        console.log('Ingredient fetched:', ingredient); // Vérifiez si l’ingrédient est trouvé
 
         if (!ingredient) {
             return res.status(404).json({ message: 'Ingredient not found' });
@@ -195,8 +205,8 @@ export const addIngredientToProduct = async (req, res) => {
 
         // Add the ingredient to the product
         const ingredientProduct = await Ingredient_Product.create({
-            id_product,
-            id_ingredient,
+            id_product: product.id_product,
+            id_ingredient: ingredient.id_ingredient,
             quantity
         });
 
@@ -210,7 +220,7 @@ export const updateIngredientOfProduct = async (req, res) => {
     const { quantity } = req.body;
 
     try {
-        // Fetch the ingredient-product association by productId and ingredientId
+        // Fetch the ingredient-product association by id_product and id_ingredient
         const ingredientProduct = await Ingredient_Product.findOne({
             where: {
                 id_product,
@@ -232,7 +242,7 @@ export const deleteIngredientFromProduct = async (req, res) => {
     const { id_product, id_ingredient } = req.params;
 
     try {
-        // Fetch the ingredient-product association by productId and ingredientId
+        // Fetch the ingredient-product association by id_product and id_ingredient
         const ingredientProduct = await Ingredient_Product.findOne({
             where: {
                 id_product,

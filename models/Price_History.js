@@ -24,7 +24,6 @@ const Price_History = database.define('Price_History', {
         allowNull: false,
     },
 }, {
-    tableName: 'price_history',
     timestamps: false,
 });
 

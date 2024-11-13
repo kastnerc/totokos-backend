@@ -25,22 +25,6 @@ const Product = database.define('Product', {
     description: DataTypes.STRING,
     stock: DataTypes.INTEGER,
     expiry_date: DataTypes.DATE,
-}, {
-    hooks: {
-        afterCreate: async (product, options) => {
-            console.log('Product Data:', product); // Vérifiez si product_price est présent
-    
-            if (!product.product_price) {
-                throw new Error('Product price is required to create a price history entry');
-            }
-    
-            await Price_History.create({
-                id_product: product.id_product,
-                product_price: product.product_price,
-                date: new Date()
-            });
-        }
-    }
 });
 
 export default Product;

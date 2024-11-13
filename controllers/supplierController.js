@@ -56,24 +56,49 @@ export const addSupplier = async (req, res) => {
 };
 
 export const updateSupplier = async (req, res) => {
-    const { id } = req.params
-    const { supplier_name, supplier_address, telephone_contact, supplier_email } = req.body
+    // Retrieve the supplier ID from the request parameters
+    const { id } = req.params;
+    // Retrieve the updated supplier information from the request body
+    const updatedData = req.body;
+
     try {
         // Update the supplier with the provided data where the id matches
-        const supplier = await Supplier.update({ supplier_name, supplier_address, telephone_contact, supplier_email }, { where: { id_supplier: id } })
-        res.status(200).json(supplier)
+        const [updatedRows] = await Supplier.update(updatedData, {
+            where: { id_supplier: id }
+        });
+
+        // Check if any rows were updated
+        if (updatedRows > 0) {
+            res.status(200).json({ message: "Supplier updated successfully" });
+        } else {
+            res.status(404).json({ message: "Supplier not found or no changes made" });
+        }
     } catch (error) {
-        res.status(400).json({ message: error })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const deleteSupplier = async (req, res) => {
-    const { id } = req.params
+    // Retrieve the supplier ID from the request parameters
+    const { id } = req.params;
+
     try {
         // Delete the supplier where the id matches
-        const supplier = await Supplier.destroy({ where: { id_supplier: id } })
-        res.status(200).json(supplier)
+        const deletedRows = await Supplier.destroy({
+            where: { id_supplier: id }
+        });
+
+        // Check if any rows were deleted
+        if (deletedRows > 0) {
+            res.status(200).json({ message: "Supplier deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Supplier not found" });
+        }
     } catch (error) {
-        res.status(400).json({ message: error })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
-}
+};

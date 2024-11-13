@@ -59,27 +59,53 @@ export const addProductCategory = async (req, res) => {
 };
 
 export const updateProductCategory = async (req, res) => {
-    const { id } = req.params
-    const { category_name, category_description } = req.body
+    // Retrieve the product category ID from the request parameters
+    const { id } = req.params;
+    // Retrieve the updated category information from the request body
+    const updatedData = req.body;
+
     try {
         // Update the product category with the provided data where the id matches
-        const product_category = await Product_Category.update({ category_name, category_description }, { where: { id_category: id } })
-        res.status(200).json(product_category)
+        const [updatedRows] = await Product_Category.update(updatedData, {
+            where: { id_category: id }
+        });
+
+        // Check if any rows were updated
+        if (updatedRows > 0) {
+            res.status(200).json({ message: "Product category updated successfully" });
+        } else {
+            res.status(404).json({ message: "Product category not found or no changes made" });
+        }
     } catch (error) {
-        res.status(400).json({ message: error })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
-}
+};
+
 
 export const deleteProductCategory = async (req, res) => {
-    const { id } = req.params
+    // Retrieve the product category ID from the request parameters
+    const { id } = req.params;
+
     try {
         // Delete the product category where the id matches
-        const product_category = await Product_Category.destroy({ where: { id_category: id } })
-        res.status(200).json(product_category)
+        const deletedRows = await Product_Category.destroy({
+            where: { id_category: id }
+        });
+
+        // Check if any rows were deleted
+        if (deletedRows > 0) {
+            res.status(200).json({ message: "Product category deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Product category not found" });
+        }
     } catch (error) {
-        res.status(400).json({ message: error })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const listProductsByCategory = async (req, res) => {
     // Retrieve the category ID from the URL
