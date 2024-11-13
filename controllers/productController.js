@@ -1,9 +1,9 @@
 import { Product, Ingredient, Ingredient_Product } from '../relationships/Relations.js'
 
-// Get all products (only the name and the price)
+// Get all products (only the product_name and the product_price)
 export const getProducts = async (req, res) => {
     try {
-        // Fetch all products with only name and price attributes
+        // Fetch all products with only product_name and product_price attributes
         const products = await Product.findAll({
             attributes: ['product_name', 'product_price']
         });
@@ -43,17 +43,24 @@ export const addProduct = async (req, res) => {
     }
 
     try {
-        // Créez un nouveau produit
-        const product = await Product.create({
-            id_category,
-            product_name,
-            product_price,
-            description,
-            stock,
-            expiry_date
-        });
+        // Create each product
+        const createdProducts = [];
+        for (const product of products) {
+            const { product_name, product_price, description, stock, expiry_date, id_category } = product;
 
-        res.status(201).json(product);
+            // Validate necessary fields
+            if (!product_name || product_price == null || !description || stock == null || !expiry_date || !id_category) {
+                console.log("Missing required fields for product:", product_name);
+                continue; // Skip this product if any field is missing
+            }
+
+            // Create the product in the database
+            const result = await Product.create({ product_name, product_price, description, stock, expiry_date, id_category });
+            createdProducts.push(result);
+        }
+
+        // Respond with the created products
+        res.status(201).json({ data: createdProducts, message: "Products successfully created" });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -61,10 +68,10 @@ export const addProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { name, price, description, stock, expiry_date, id_category } = req.body;
+    const { product_name, product_price, description, stock, expiry_date, id_category } = req.body;
     try {
         // Update the product with the provided data where the id matches
-        const product = await Product.update({ name, price, description, stock, expiry_date, id_category }, { where: { id_product: id } });
+        const product = await Product.update({ product_name, product_price, description, stock, expiry_date, id_category }, { where: { id_product: id } });
         res.status(200).json(product);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -108,10 +115,10 @@ export const listPriceHistoryByProductId = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Get all price histories associated with the product
-        const priceHistory = await product.getPrice_Histories();
+        // Get all product_price histories associated with the product
+        const product_priceHistory = await product.getproduct_price_Histories();
 
-        res.status(200).json({ data: priceHistory });
+        res.status(200).json({ data: product_priceHistory });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

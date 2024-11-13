@@ -57,7 +57,7 @@ export const addSupplier = async (req, res) => {
 
 export const updateSupplier = async (req, res) => {
     const { id } = req.params
-    const { name, address, phone, email } = req.body
+    const { supplier_name, supplier_address, telephone_contact, supplier_email } = req.body
     try {
         // Update the supplier with the provided data where the id matches
         const supplier = await Supplier.update({ supplier_name, supplier_address, telephone_contact, supplier_email }, { where: { id_supplier: id } })

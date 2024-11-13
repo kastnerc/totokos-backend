@@ -64,7 +64,7 @@ export const addIngredient = async (req, res) => {
 
 export const updateIngredient = async (req, res) => {
     const { id } = req.params
-    const { name, stock, unit, price } = req.body
+    const { ingredient_name, stock, unit_measure, price_per_unit } = req.body
     try {
         // Update the ingredient with the provided data where the id matches
         const ingredient = await Ingredient.update({ ingredient_name, stock, unit_measure, price_per_unit }, { where: { id_ingredient: id } })
