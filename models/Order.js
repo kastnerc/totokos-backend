@@ -13,6 +13,7 @@ const Order = database.define('Order', {
         references: {
             model: User,
             key: 'id_user',
+            allowNull: false,
         },
     },
     order_date: DataTypes.DATE,

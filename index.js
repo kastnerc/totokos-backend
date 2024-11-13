@@ -6,9 +6,9 @@ import bodyParser from "body-parser";
 import dotenv from 'dotenv'
 import database from "./config/database.js";
 import ingredientRoute from "./routes/ingredientRoute.js";
-import orderRoute from "./routes/orderRoute.js";
+import orderRoute from "./Routes/orderRoute.js";
 import product_categoryRoute from "./routes/product_categoryRoute.js";
-import productRoute from "./routes/productRoute.js";
+import productRoute from "./Routes/productRoute.js";
 import supplierRoute from "./routes/supplierRoute.js";
 import userRoute from "./routes/userRoute.js";
 

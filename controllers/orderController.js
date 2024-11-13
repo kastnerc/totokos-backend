@@ -45,36 +45,68 @@ export const createOrder = async (req, res) => {
         // Create each order and associate products
         const createdOrders = [];
         for (const order of orders) {
-            const { userId, products } = order;
+            const { id_user, products, pickup_date } = order;
 
             // Validate presence of userId and products
-            if (!userId || !Array.isArray(products) || products.length === 0) {
-                console.log("Missing userId or products in order:", order);
+            if (!id_user || !Array.isArray(products) || products.length === 0) {
+                console.log("Missing id_user or products in order:", order);
                 continue; // Skip this order if missing required fields
             }
 
-            // Create the order with the userId
-            const newOrder = await Order.create({ userId });
-            
-            // Add each product to the order
+            // Calculate the total price of the order
+            let total_price = 0;
             for (const product of products) {
-                const { productId, quantity } = product;
-                
+                const { id_product, quantity } = product;
+
                 // Validate required fields for each product
-                if (!productId || !quantity) {
+                if (!id_product || !quantity) {
                     console.log("Missing productId or quantity for product:", product);
                     continue; // Skip this product if any required fields are missing
                 }
 
+                // Fetch the product price
+                const productData = await Product.findByPk(id_product);
+                if (!productData) {
+                    console.log("Product not found:", id_product);
+                    continue; // Skip this product if not found
+                }
+
+                total_price += productData.product_price * quantity;
+            }
+
+            // Create the order with the id_user, order_date, total_price, and pickup_date
+            const newOrder = await Order.create({
+                id_user,
+                order_date: new Date(),
+                total_price,
+                status: 'in process',
+                reservation: false,
+                pickup_date
+            });
+
+            // Add each product to the order
+            for (const product of products) {
+                const { id_product, quantity } = product;
+
                 // Add the product to the order
                 await Order_Product.create({
-                    orderId: newOrder.id,
-                    productId,
+                    id_order: newOrder.id_order,
+                    id_product,
                     quantity
                 });
             }
 
-            createdOrders.push(newOrder); // Add the created order to the response
+            // Add the created order to the response
+            createdOrders.push({
+                id_order: newOrder.id_order,
+                id_user: newOrder.id_user,
+                order_date: newOrder.order_date,
+                total_price: newOrder.total_price,
+                status: newOrder.status,
+                reservation: newOrder.reservation,
+                pickup_date: newOrder.pickup_date,
+                products: products
+            });
         }
 
         // Respond with the created orders
