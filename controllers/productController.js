@@ -110,33 +110,76 @@ export const addProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
     const { product_name, product_price, description, stock, expiry_date, id_category } = req.body;
+
     try {
         // Update the product with the provided data where the id matches
-        const product = await Product.update({ product_name, product_price, description, stock, expiry_date, id_category }, { where: { id_product: id } });
+        const [updatedRows] = await Product.update(
+            { product_name, product_price, description, stock, expiry_date, id_category },
+            { where: { id_product: id } }
+        );
+
+        if (updatedRows === 0) {
+            return res.status(404).json({ message: 'Product not found or no changes made' });
+        }
+
+        // Fetch the updated product details
+        const updatedProduct = await Product.findByPk(id);
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found after update' });
+        }
 
         // Manually create a price history entry
         await Price_History.create({
-            id_product: createdProduct.id_product,
-            price: createdProduct.product_price,
+            id_product: updatedProduct.id_product, // Reference the updated product ID
+            price: updatedProduct.product_price,
             date: new Date()
         });
 
-        res.status(200).json(product);
+        res.status(200).json({ message: 'Product updated successfully and price history recorded', data: updatedProduct });
     } catch (error) {
+        console.error(error);
         res.status(400).json({ message: error.message });
     }
-}
+};
+
 
 export const deleteProduct = async (req, res) => {
     const { id } = req.params;
+
     try {
+        // Check if the product exists
+        const product = await Product.findByPk(id);
+
+        if (!product) {
+            // If the product is not found, return a 404 response
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Optionally delete associated price history records for the product
+        await Price_History.destroy({ where: { id_product: id } });
+
         // Delete the product where the id matches
-        const product = await Product.destroy({ where: { id_product: id } });
-        res.status(200).json(product);
+        await Product.destroy({ where: { id_product: id } });
+
+        // Return a success message with the deleted product's details
+        res.status(200).json({
+            message: 'Product successfully deleted, along with associated price history entries',
+            data: {
+                id_product: product.id_product,
+                product_name: product.product_name,
+                product_price: product.product_price,
+                description: product.description,
+                stock: product.stock,
+                expiry_date: product.expiry_date,
+                id_category: product.id_category
+            }
+        });
     } catch (error) {
+        console.error(error);
         res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const listIngredientsByProductId = async (req, res) => {
     const { id } = req.params;
@@ -175,7 +218,7 @@ export const listPriceHistoryByProductId = async (req, res) => {
         }
 
         // Get all product_price histories associated with the product
-        const product_priceHistory = await product.getproduct_price_Histories();
+        const product_priceHistory = await Price_History.findAll({ where: { id_product: id } });
 
         res.status(200).json({ data: product_priceHistory });
     } catch (error) {
@@ -215,6 +258,7 @@ export const addIngredientToProduct = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 export const updateIngredientOfProduct = async (req, res) => {
     const { id_product, id_ingredient } = req.params;
     const { quantity } = req.body;

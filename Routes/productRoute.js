@@ -11,8 +11,8 @@ route.get('/product-page/', getProducts)
 .post('/:id/ingredients', addIngredientToProduct)
 .post('/', addProduct)
 .patch('/:id', updateProduct)
-.patch('/:id/ingredients/:ingredientId', updateIngredientOfProduct)
-.delete('/:id/ingredients/:ingredientId', deleteIngredientFromProduct)
+.patch('/:id_product/ingredients/:id_ingredient', updateIngredientOfProduct)
+.delete('/:id_product/ingredients/:id_ingredient', deleteIngredientFromProduct)
 .delete('/:id', deleteProduct)
 
 export default route
