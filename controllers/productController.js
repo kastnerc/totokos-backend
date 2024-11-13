@@ -5,7 +5,7 @@ export const getProducts = async (req, res) => {
     try {
         // Fetch all products with only name and price attributes
         const products = await Product.findAll({
-            attributes: ['name', 'price']
+            attributes: ['product_name', 'product_price']
         });
         res.status(200).json(products);
     } catch (error) {
@@ -35,35 +35,26 @@ export const getProductById = async (req, res) => {
 }
 
 export const addProduct = async (req, res) => {
-    // Retrieve the new products' information (array of product objects)
-    const products = req.body;
+    const { id_category, product_name, product_price, description, stock, expiry_date } = req.body;
 
-    // Validate if the input is an array and it's not empty
-    if (!Array.isArray(products) || products.length === 0) {
+    // Validation des données
+    if (!id_category || !product_name || !product_price) {
         return res.status(400).json({ message: "No products provided or invalid data format." });
     }
 
     try {
-        // Create each product
-        const createdProducts = [];
-        for (const product of products) {
-            const { name, price, description, stock, expiry_date, id_category } = product;
+        // Créez un nouveau produit
+        const product = await Product.create({
+            id_category,
+            product_name,
+            product_price,
+            description,
+            stock,
+            expiry_date
+        });
 
-            // Validate necessary fields
-            if (!name || price == null || !description || stock == null || !expiry_date || !id_category) {
-                console.log("Missing required fields for product:", name);
-                continue; // Skip this product if any field is missing
-            }
-
-            // Create the product in the database
-            const result = await Product.create({ name, price, description, stock, expiry_date, id_category });
-            createdProducts.push(result);
-        }
-
-        // Respond with the created products
-        res.status(201).json({ data: createdProducts, message: "Products successfully created" });
+        res.status(201).json(product);
     } catch (error) {
-        console.log('Error during product creation:', error);
         res.status(400).json({ message: error.message });
     }
 };

@@ -11,17 +11,13 @@ const Price_History = database.define('Price_History', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Products',
+            model: 'Products',  // Assurez-vous que la table Products existe
             key: 'id_product',
-        }
+        },
     },
     price: {
         type: DataTypes.DECIMAL,
-        allowNull: false,  // Ne permet pas les valeurs nulles
-        validate: {
-            notNull: { msg: 'Price cannot be null' }, // Message d'erreur personnalisé
-            isDecimal: { msg: 'Price must be a valid decimal number' }
-        }
+        allowNull: false,
     },
     date: {
         type: DataTypes.DATE,
