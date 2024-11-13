@@ -8,6 +8,7 @@ const Product = database.define('Product', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        field: 'id_product' // Si la base utilise des underscores
     },
     id_category: {
         type: DataTypes.INTEGER,

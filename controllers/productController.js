@@ -35,31 +35,29 @@ export const getProductById = async (req, res) => {
 }
 
 export const addProduct = async (req, res) => {
-    const { id_category, product_name, product_price, description, stock, expiry_date } = req.body;
+    // Vérification si req.body.products est un tableau valide
+    const products = req.body.products;
 
-    // Validation des données
-    if (!id_category || !product_name || !product_price) {
+    if (!products || !Array.isArray(products) || products.length === 0) {
         return res.status(400).json({ message: "No products provided or invalid data format." });
     }
 
     try {
-        // Create each product
         const createdProducts = [];
         for (const product of products) {
             const { product_name, product_price, description, stock, expiry_date, id_category } = product;
 
-            // Validate necessary fields
-            if (!product_name || product_price == null || !description || stock == null || !expiry_date || !id_category) {
+            // Validation des champs nécessaires pour chaque produit
+            if (!product_name || product_price == null || stock == null || !id_category) {
                 console.log("Missing required fields for product:", product_name);
-                continue; // Skip this product if any field is missing
+                continue; // Sauter ce produit si des champs sont manquants
             }
 
-            // Create the product in the database
+            // Créer le produit dans la base de données
             const result = await Product.create({ product_name, product_price, description, stock, expiry_date, id_category });
             createdProducts.push(result);
         }
 
-        // Respond with the created products
         res.status(201).json({ data: createdProducts, message: "Products successfully created" });
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -127,22 +125,23 @@ export const listPriceHistoryByProductId = async (req, res) => {
 export const addIngredientToProduct = async (req, res) => {
     const { productId, ingredientId, quantity } = req.body;
 
+    console.log('Request Body:', req.body); // Vérifiez le contenu de la requête
+
     try {
-        // Fetch the product by its primary key (id)
         const product = await Product.findByPk(productId);
+        console.log('Product fetched:', product); // Vérifiez si le produit est trouvé
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Fetch the ingredient by its primary key (id)
         const ingredient = await Ingredient.findByPk(ingredientId);
+        console.log('Ingredient fetched:', ingredient); // Vérifiez si l’ingrédient est trouvé
 
         if (!ingredient) {
             return res.status(404).json({ message: 'Ingredient not found' });
         }
 
-        // Add the ingredient to the product
         const ingredientProduct = await Ingredient_Product.create({
             productId: product.id_product,
             ingredientId: ingredient.id_ingredient,
@@ -151,9 +150,10 @@ export const addIngredientToProduct = async (req, res) => {
 
         res.status(201).json({ message: 'Ingredient added to product successfully', data: ingredientProduct });
     } catch (error) {
+        console.error('Error:', error);
         res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const updateIngredientOfProduct = async (req, res) => {
     const { productId, ingredientId } = req.params;
