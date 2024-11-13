@@ -7,7 +7,7 @@ const Price_History = database.define('Price_History', {
         primaryKey: true,
         autoIncrement: true,
     },
-    productId: {
+    id_product: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
