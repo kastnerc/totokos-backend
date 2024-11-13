@@ -20,7 +20,7 @@ const Product = database.define('Product', {
     product_name: DataTypes.STRING,
     product_price: { // Vérifiez ici
         type: DataTypes.DECIMAL,
-        allowNull: false,  // Facultatif mais recommandé
+        allowNull: false,
     },
     description: DataTypes.STRING,
     stock: DataTypes.INTEGER,
@@ -35,8 +35,8 @@ const Product = database.define('Product', {
             }
     
             await Price_History.create({
-                productId: product.id_product,
-                price: product.product_price,
+                id_product: product.id_product,
+                product_price: product.product_price,
                 date: new Date()
             });
         }

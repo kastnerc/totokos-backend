@@ -35,32 +35,75 @@ export const getProductById = async (req, res) => {
 }
 
 export const addProduct = async (req, res) => {
-    // Vérification si req.body.products est un tableau valide
-    const products = req.body.products;
+    const products = req.body;
 
-    if (!products || !Array.isArray(products) || products.length === 0) {
-        return res.status(400).json({ message: "No products provided or invalid data format." });
-    }
-
-    try {
+    if (Array.isArray(products)) {
+        // Handle array of products
         const createdProducts = [];
-        for (const product of products) {
-            const { product_name, product_price, description, stock, expiry_date, id_category } = product;
+        try {
+            for (const product of products) {
+                const { id_category, product_name, product_price, description, stock, expiry_date } = product;
 
-            // Validation des champs nécessaires pour chaque produit
-            if (!product_name || product_price == null || stock == null || !id_category) {
-                console.log("Missing required fields for product:", product_name);
-                continue; // Sauter ce produit si des champs sont manquants
+                if (!id_category || !product_name || product_price == null || !description || stock == null || !expiry_date) {
+                    console.log("Missing required fields for product:", product_name);
+                    continue;
+                }
+
+                // Create the product
+                const createdProduct = await Product.create({
+                    id_category, 
+                    product_name, 
+                    product_price, 
+                    description, 
+                    stock, 
+                    expiry_date
+                });
+
+                // Manually create a price history entry
+                await Price_History.create({
+                    id_product: createdProduct.id_product,
+                    price: createdProduct.product_price,
+                    date: new Date()
+                });
+
+                createdProducts.push(createdProduct);
             }
+            res.status(201).json({ data: createdProducts, message: "Products successfully created" });
+        } catch (error) {
+            console.error(error);
+            res.status(400).json({ message: error.message });
+        }
+    } else {
+        // Handle single product
+        const { id_category, product_name, product_price, description, stock, expiry_date } = products;
 
-            // Créer le produit dans la base de données
-            const result = await Product.create({ product_name, product_price, description, stock, expiry_date, id_category });
-            createdProducts.push(result);
+        if (!id_category || !product_name || product_price == null || !description || stock == null || !expiry_date) {
+            return res.status(400).json({ message: "Missing required fields or invalid data format." });
         }
 
-        res.status(201).json({ data: createdProducts, message: "Products successfully created" });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
+        try {
+            // Create the product
+            const createdProduct = await Product.create({
+                id_category, 
+                product_name, 
+                product_price, 
+                description, 
+                stock, 
+                expiry_date
+            });
+
+            // Manually create a price history entry
+            await Price_History.create({
+                id_product: createdProduct.id_product,
+                price: createdProduct.product_price,
+                date: new Date()
+            });
+
+            res.status(201).json({ data: createdProduct, message: "Product successfully created" });
+        } catch (error) {
+            console.error(error);
+            res.status(400).json({ message: error.message });
+        }
     }
 };
 
@@ -88,26 +131,36 @@ export const deleteProduct = async (req, res) => {
 }
 
 export const listIngredientsByProductId = async (req, res) => {
-    const { productId } = req.params;
+    const { id } = req.params;
 
     try {
+        console.log('Received id_product:', id);
+
         // Fetch the product by its primary key (id)
-        const product = await Product.findByPk(productId);
+        const product = await Product.findByPk(id);
+
+        // Check if the product exists
+        if (!product) {
+            console.log('Product not found with id:', id_product);
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
         // Get all ingredients associated with the product
         const ingredients = await product.getIngredients();
 
         res.status(200).json({ data: ingredients });
     } catch (error) {
+        console.log('Error fetching product or ingredients:', error);
         res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const listPriceHistoryByProductId = async (req, res) => {
-    const { productId } = req.params;
+    const { id } = req.params;
 
     try {
         // Fetch the product by its primary key (id)
-        const product = await Product.findByPk(productId);
+        const product = await Product.findByPk(id);
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
@@ -123,48 +176,45 @@ export const listPriceHistoryByProductId = async (req, res) => {
 }
 
 export const addIngredientToProduct = async (req, res) => {
-    const { productId, ingredientId, quantity } = req.body;
-
-    console.log('Request Body:', req.body); // Vérifiez le contenu de la requête
+    const { id_product, id_ingredient, quantity } = req.body;
 
     try {
-        const product = await Product.findByPk(productId);
-        console.log('Product fetched:', product); // Vérifiez si le produit est trouvé
+        // Fetch the product by its primary key (id)
+        const product = await Product.findByPk(id_product);
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        const ingredient = await Ingredient.findByPk(ingredientId);
-        console.log('Ingredient fetched:', ingredient); // Vérifiez si l’ingrédient est trouvé
+        // Fetch the ingredient by its primary key (id)
+        const ingredient = await Ingredient.findByPk(id_ingredient);
 
         if (!ingredient) {
             return res.status(404).json({ message: 'Ingredient not found' });
         }
 
+        // Add the ingredient to the product
         const ingredientProduct = await Ingredient_Product.create({
-            productId: product.id_product,
-            ingredientId: ingredient.id_ingredient,
+            id_product,
+            id_ingredient,
             quantity
         });
 
         res.status(201).json({ message: 'Ingredient added to product successfully', data: ingredientProduct });
     } catch (error) {
-        console.error('Error:', error);
         res.status(500).json({ message: error.message });
     }
 };
-
 export const updateIngredientOfProduct = async (req, res) => {
-    const { productId, ingredientId } = req.params;
+    const { id_product, id_ingredient } = req.params;
     const { quantity } = req.body;
 
     try {
         // Fetch the ingredient-product association by productId and ingredientId
         const ingredientProduct = await Ingredient_Product.findOne({
             where: {
-                productId,
-                ingredientId
+                id_product,
+                id_ingredient
             }
         });
 
@@ -179,14 +229,14 @@ export const updateIngredientOfProduct = async (req, res) => {
 }
 
 export const deleteIngredientFromProduct = async (req, res) => {
-    const { productId, ingredientId } = req.params;
+    const { id_product, id_ingredient } = req.params;
 
     try {
         // Fetch the ingredient-product association by productId and ingredientId
         const ingredientProduct = await Ingredient_Product.findOne({
             where: {
-                productId,
-                ingredientId
+                id_product,
+                id_ingredient
             }
         });
 
