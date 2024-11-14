@@ -10,35 +10,48 @@ import Supplier from "../models/Supplier.js";
 import Price_History from "../models/Price_History.js";
 
 // Associations
-User.hasMany(Order)
-
+User.hasMany(Order,{
+    foreignKey:{
+        name: 'id_order',
+        allowNull:false}
+    })
 Order.belongsTo(User)
-Order.hasMany(Order_Product)
 
-Order_Product.belongsTo(Order)
-Order_Product.belongsTo(Product)
 
-Product.hasMany(Order_Product)
-Product.hasMany(Ingredient_Product)
-Product.hasMany(Price_History)
-Product.belongsTo(Product_Category)
+// Order.hasMany(Order_Product)
+// // Order_Product.belongsTo(Order)
 
+
+// // Product.hasMany(Order_Product)
+// Order_Product.belongsTo(Product)
+
+
+Product.belongsTo(Product_Category,{
+    foreignKey:{
+        name:'id_category',
+        allowNull:false}
+})
 Product_Category.hasMany(Product)
 
-Price_History.belongsTo(Product)
 
-Ingredient_Product.belongsTo(Product)
-Ingredient_Product.belongsTo(Ingredient)
+Price_History.belongsTo(Product,{
+    foreignKey:{
+        name: 'id_product',
+        allowNull:false}
+    })
+Product.hasMany(Price_History)
 
-Ingredient.hasMany(Ingredient_Product)
-Ingredient.belongsTo(Supplier)
-
+Ingredient.belongsTo(Supplier,{
+    foreignKey:{
+        name:'id_supplier',
+        allowNull:false}
+})
 Supplier.hasMany(Ingredient)
 
-Product.belongsToMany(Ingredient, { through: Ingredient_Product, foreignKey: 'id_product', otherKey: 'id_ingredient'});
-Ingredient.belongsToMany(Product, { through: Ingredient_Product,foreignKey: 'id_ingredient', otherKey: 'id_product'  });
+Product.belongsToMany(Ingredient, { through: 'Ingredient_Product', foreignKey: 'id_product', otherKey: 'id_ingredient'});
+Ingredient.belongsToMany(Product, { through: 'Ingredient_Product',foreignKey: 'id_ingredient', otherKey: 'id_product'  });
 
-Product.belongsToMany(Order, { through: Order_Product, foreignKey: 'id_product', otherKey: 'id_order' });
-Order.belongsToMany(Product, { through: Order_Product, foreignKey: 'id_order', otherKey: 'id_product' });
+Product.belongsToMany(Order, { through: 'Order_Product', foreignKey: 'id_product', otherKey: 'id_order' });
+Order.belongsToMany(Product, { through: 'Order_Product', foreignKey: 'id_order', otherKey: 'id_product' });
 
 export {User, Order, Order_Product, Product, Product_Category, Ingredient, Ingredient_Product, Supplier, Price_History}

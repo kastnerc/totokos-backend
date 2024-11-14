@@ -122,11 +122,12 @@ export const createOrder = async (req, res) => {
 };
 
 export const getProductInfoByOrderId = async (req, res) => {
-    const { orderId } = req.params;
+    const { id:orderId } = req.params;
 
     try {
         // Fetch the order by its primary key (id)
         const order = await Order.findByPk(orderId);
+        console.log("produits", order)
         // Get all products associated with the order
         const products = await order.getProducts();
 
