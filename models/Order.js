@@ -11,7 +11,7 @@ const Order = database.define('Order', {
     id_client: {
         type: DataTypes.INTEGER,
         references: {
-            model: User,
+            model: 'Users',
             key: 'id_user',
             allowNull: false,
         },

@@ -45,11 +45,11 @@ export const createOrder = async (req, res) => {
         // Create each order and associate products
         const createdOrders = [];
         for (const order of orders) {
-            const { id_user, products, pickup_date } = order;
+            const { id_client, products, pickup_date } = order;
 
-            // Validate presence of userId and products
-            if (!id_user || !Array.isArray(products) || products.length === 0) {
-                console.log("Missing id_user or products in order:", order);
+            // Validate presence of id_client and products
+            if (!id_client || !Array.isArray(products) || products.length === 0) {
+                console.log("Missing id_client or products in order:", order);
                 continue; // Skip this order if missing required fields
             }
 
@@ -74,15 +74,17 @@ export const createOrder = async (req, res) => {
                 total_price += productData.product_price * quantity;
             }
 
-            // Create the order with the id_user, order_date, total_price, and pickup_date
+            // Create the order with the id_client, order_date, total_price, and pickup_date
             const newOrder = await Order.create({
-                id_user,
+                id_client,
                 order_date: new Date(),
                 total_price,
                 status: 'in process',
                 reservation: false,
                 pickup_date
             });
+
+            console.log('Order created:', newOrder);
 
             // Add each product to the order
             for (const product of products) {
@@ -94,12 +96,14 @@ export const createOrder = async (req, res) => {
                     id_product,
                     quantity
                 });
+
+                console.log('Product added to order:', { id_order: newOrder.id_order, id_product, quantity });
             }
 
             // Add the created order to the response
             createdOrders.push({
                 id_order: newOrder.id_order,
-                id_user: newOrder.id_user,
+                id_client: newOrder.id_client,
                 order_date: newOrder.order_date,
                 total_price: newOrder.total_price,
                 status: newOrder.status,
