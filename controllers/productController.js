@@ -143,7 +143,6 @@ export const updateProduct = async (req, res) => {
     }
 };
 
-
 export const deleteProduct = async (req, res) => {
     const { id } = req.params;
 
@@ -248,9 +247,9 @@ export const addIngredientToProduct = async (req, res) => {
 
         // Add the ingredient to the product
         const ingredientProduct = await Ingredient_Product.create({
-            id_product: product.id_product,
-            id_ingredient: ingredient.id_ingredient,
-            quantity
+            id_product: id_product,
+            id_ingredient: id_ingredient,
+            quantity: quantity
         });
 
         res.status(201).json({ message: 'Ingredient added to product successfully', data: ingredientProduct });
