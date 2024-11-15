@@ -1,14 +1,39 @@
 import { Ingredient } from '../relationships/Relations.js'
+import { Op } from 'sequelize';
 
 export const getIngredients = async (req, res) => {
+    const { page = 1, limit = 10, ...filters } = req.query;
+
     try {
-        // Fetch all ingredients from the database
-        const ingredients = await Ingredient.findAll()
-        res.status(200).json(ingredients)
+        const offset = (page - 1) * limit;
+        const where = {};
+
+        // Ajouter des filtres dynamiques pour chaque champ
+        for (const [key, value] of Object.entries(filters)) {
+            if (Ingredient.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+                where[key] = {
+                    [Op.like]: `%${value}%`
+                };
+            }
+        }
+
+        // Récupérer les ingrédients avec pagination et filtrage
+        const result = await Ingredient.findAndCountAll({
+            where,
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+        });
+
+        res.status(200).json({
+            data: result.rows,
+            total: result.count,
+            page: parseInt(page),
+            pages: Math.ceil(result.count / limit)
+        });
     } catch (error) {
-        res.status(400).json({ message: error })
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const getIngredientById = async (req, res) => {
     const { id } = req.params

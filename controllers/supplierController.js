@@ -1,14 +1,40 @@
 import { Supplier } from '../relationships/Relations.js'
+import { Op } from 'sequelize';
 
 export const getSuppliers = async (req, res) => {
+    const { page = 1, limit = 10, ...filters } = req.query;
+
     try {
-        // Fetch all suppliers from the database
-        const suppliers = await Supplier.findAll()
-        res.status(200).json(suppliers)
+        const offset = (page - 1) * limit;
+        const where = {};
+
+        // Ajouter des filtres dynamiques pour chaque champ
+        for (const [key, value] of Object.entries(filters)) {
+            if (Supplier.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+                where[key] = {
+                    [Op.like]: `%${value}%`
+                };
+            }
+        }
+
+        // Récupérer les fournisseurs avec pagination et filtrage
+        const result = await Supplier.findAndCountAll({
+            where,
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+        });
+
+        // Envoyer la réponse avec les fournisseurs paginés
+        res.status(200).json({
+            data: result.rows,
+            total: result.count,
+            page: parseInt(page),
+            pages: Math.ceil(result.count / limit)
+        });
     } catch (error) {
-        res.status(400).json({ message: error })
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const getSupplierById = async (req, res) => {
     const { id } = req.params

@@ -1,15 +1,39 @@
 import { Order, Order_Product, Product } from '../relationships/Relations.js'
+import { Op } from 'sequelize';
 
 export const getOrders = async (req, res) => {
-    try {
-        // Fetch all orders from the database
-        const orders = await Order.findAll()
-        res.status(200).json(orders)
-    } catch (error) {
-        res.status(400).json({ message: error })
-    }
-}
+    const { page = 1, limit = 10, ...filters } = req.query;
 
+    try {
+        const offset = (page - 1) * limit;
+        const where = {};
+
+        // Ajouter des filtres dynamiques pour chaque champ
+        for (const [key, value] of Object.entries(filters)) {
+            if (Order.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+                where[key] = {
+                    [Op.like]: `%${value}%`
+                };
+            }
+        }
+
+        // Récupérer les commandes avec pagination et filtrage
+        const result = await Order.findAndCountAll({
+            where,
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+        });
+
+        res.status(200).json({
+            data: result.rows,
+            total: result.count,
+            page: parseInt(page),
+            pages: Math.ceil(result.count / limit)
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
 export const getOrderById = async (req, res) => {
     const { id } = req.params
     try {
@@ -138,16 +162,29 @@ export const getProductInfoByOrderId = async (req, res) => {
 }
 
 export const updateOrder = async (req, res) => {
-    const { id } = req.params
-    const updatedOrder = req.body
+    // Retrieve the order ID from the request parameters
+    const { id } = req.params;
+    // Retrieve the updated order information from the request body
+    const updatedData = req.body;
+
     try {
         // Update the order with the provided data where the id matches
-        const order = await Order.update({ updatedOrder }, { where: { id_order: id } })
-        res.status(200).json(order)
+        const [updatedRows] = await Order.update(updatedData, {
+            where: { id_order: id }
+        });
+
+        // Check if any rows were updated
+        if (updatedRows > 0) {
+            res.status(200).json({ message: "Order updated successfully" });
+        } else {
+            res.status(404).json({ message: "Order not found or no changes made" });
+        }
     } catch (error) {
-        res.status(400).json({ message: error })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 // Function to delete a product from an order
 export const deleteProductFromOrder = async (req, res) => {

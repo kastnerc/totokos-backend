@@ -1,16 +1,40 @@
 import { User, Order_Product, Product } from '../relationships/Relations.js'
 import bcrypt from 'bcryptjs'
+import { Op } from 'sequelize';
 
 export const getAllUsers = async (req, res) => {
+    const { page = 1, limit = 10, ...filters } = req.query;
+
     try {
-        // Fetch all users from the database
-        const result = await User.findAll()
-        res.status(200).json({ data: result });
+        const offset = (page - 1) * limit;
+        const where = {};
+
+        // Ajouter des filtres dynamiques pour chaque champ
+        for (const [key, value] of Object.entries(filters)) {
+            if (User.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+                where[key] = {
+                    [Op.like]: `%${value}%`
+                };
+            }
+        }
+
+        // Récupérer les utilisateurs avec pagination et filtrage
+        const result = await User.findAndCountAll({
+            where,
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+        });
+
+        res.status(200).json({
+            data: result.rows,
+            total: result.count,
+            page: parseInt(page),
+            pages: Math.ceil(result.count / limit)
+        });
     } catch (error) {
-        console.log('Error code : ' + error)
-        res.status(400).json({ message: error.message })
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const addUser = async (req, res) => {
     const users = req.body;

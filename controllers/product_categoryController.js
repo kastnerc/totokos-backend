@@ -1,15 +1,39 @@
 import { Product_Category } from '../relationships/Relations.js'
-
+import { Op } from 'sequelize';
 
 export const getProductCategories = async (req, res) => {
+    const { page = 1, limit = 10, ...filters } = req.query;
+
     try {
-        // Fetch all product categories from the database
-        const product_categories = await Product_Category.findAll()
-        res.status(200).json(product_categories)
+        const offset = (page - 1) * limit;
+        const where = {};
+
+        // Ajouter des filtres dynamiques pour chaque champ
+        for (const [key, value] of Object.entries(filters)) {
+            if (Product_Category.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+                where[key] = {
+                    [Op.like]: `%${value}%`
+                };
+            }
+        }
+
+        // Récupérer les catégories de produits avec pagination et filtrage
+        const result = await Product_Category.findAndCountAll({
+            where,
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+        });
+
+        res.status(200).json({
+            data: result.rows,
+            total: result.count,
+            page: parseInt(page),
+            pages: Math.ceil(result.count / limit)
+        });
     } catch (error) {
-        res.status(400).json({ message: error })
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 // Get a product category by id
 export const getProductCategoryById = async (req, res) => {
