@@ -13,7 +13,7 @@ route.use(checkToken, authorizeEmployee)
 route.get('/', getSuppliers)
 .get('/:id', getSupplierById)
 .post('/', validate(supplierRules), addSupplier)
-.patch('/:id', validate(supplierRules), validate, updateSupplier)
+.patch('/:id', updateSupplier)
 .delete('/:id', deleteSupplier)
 
 export default route

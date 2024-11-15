@@ -13,7 +13,7 @@ route.get('/', authorizeEmployee, getOrders)
     .get('/:id', getOrderById)
     .get('/:id/product', getProductInfoByOrderId)
     .post('/', validate(orderRules), createOrder)
-    .patch('/:id', validate(orderRules), validate, authorizeEmployee, updateOrder)    
+    .patch('/:id', authorizeEmployee, updateOrder)    
     .delete('/:id', authorizeEmployee, deleteOrder)
     .delete('/:id/product/:id', authorizeEmployee, deleteProductFromOrder)
 

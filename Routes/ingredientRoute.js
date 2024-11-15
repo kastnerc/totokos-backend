@@ -14,7 +14,7 @@ route.use(authorizeEmployee);
 route.get('/', getIngredients);
 route.get('/:id', getIngredientById);
 route.post('/', validate(ingredientRules), addIngredient);
-route.patch('/:id', validate(ingredientRules), updateIngredient);
+route.patch('/:id', updateIngredient);
 route.delete('/:id', deleteIngredient);
 
 export default route;

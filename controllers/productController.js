@@ -1,4 +1,4 @@
-import { Product, Ingredient, Ingredient_Product, Price_History } from '../relationships/Relations.js'
+import { Product, Ingredient, Ingredient_Product, Price_History, Product_Category } from '../relationships/Relations.js'
 
 // Get all products (only the product_name and the product_price)
 export const getProducts = async (req, res) => {
@@ -303,5 +303,38 @@ export const deleteIngredientFromProduct = async (req, res) => {
         res.status(200).json({ message: 'Ingredient deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+}
+
+export const listProductsByCategory = async (req, res) => {
+    // Retrieve the category ID from the URL
+    const { id } = req.params;
+
+    try {
+        // Check if the category exists
+        const category = await Product_Category.findByPk(id);
+        
+        if (!category) {
+            return res.status(404).json({ message: "Category not found." });
+        }
+
+        // Fetch all products that belong to the given category
+        const products = await Product.findAll({
+            where: {
+                id_category: id // Filter products by the category id
+            }
+        });
+
+        // Check if there are any products for the category
+        if (products.length === 0) {
+            return res.status(404).json({ message: "No products found for this category." });
+        }
+
+        // Return the products in the response
+        res.status(200).json({ data: products });
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.log(error);
+        res.status(400).json({ message: error.message });
     }
 }

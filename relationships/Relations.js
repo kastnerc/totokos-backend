@@ -18,12 +18,12 @@ User.hasMany(Order,{
 Order.belongsTo(User)
 
 
-// Order.hasMany(Order_Product)
-// // Order_Product.belongsTo(Order)
+Order.hasMany(Order_Product)
+Order_Product.belongsTo(Order)
 
 
-// // Product.hasMany(Order_Product)
-// Order_Product.belongsTo(Product)
+Product.hasMany(Order_Product)
+Order_Product.belongsTo(Product)
 
 
 Product.belongsTo(Product_Category,{
