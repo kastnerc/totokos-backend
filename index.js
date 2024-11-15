@@ -9,7 +9,7 @@ import ingredientRoute from "./routes/ingredientRoute.js";
 import orderRoute from "./routes/orderRoute.js";
 import product_categoryRoute from "./routes/product_categoryRoute.js";
 import productRoute from "./routes/productRoute.js";
-import supplierRoute from "./routes/supplierRoute.js";
+import supplierRoute from "./Routes/supplierRoute.js";
 import userRoute from "./routes/userRoute.js";
 import authRoute from "./routes/authRoute.js";
 
@@ -34,7 +34,6 @@ app.use('/api/product', productRoute)
 app.use('/api/supplier', supplierRoute)
 app.use('/api/user', userRoute)
 app.use('/api/login', authRoute)
-
 
 // Start the server
 const PORT = dotenv.config().parsed.PORT

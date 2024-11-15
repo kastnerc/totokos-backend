@@ -12,7 +12,16 @@ export const login = async (req, res) => {
     try {
         // Look up the user by email
         const user = await User.findOne({ where: { email } });
-        if (!user) return res.status(404).json({ message: "User not found." });
+
+        // Check if user is found
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        console.log('User found:', user); // Debugging line
+
+        // Log the stored hashed password from the database
+        console.log('Stored hashed password:', user.password);
 
         // Check password
         const correctPassword = bcrypt.compareSync(password, user.password);
