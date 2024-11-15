@@ -10,7 +10,7 @@ const userRules = [
     .withMessage('Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre.'),
     body('*.surname').exists().withMessage('Le prénom est requis.').isLength({ min: 2, max: 100 }).withMessage('Le prénom doit comporter entre 2 et 100 caractères.').matches(/^[A-Za-z\s]+$/).withMessage('Le prénom ne peut contenir que des lettres et des espaces.'),
     body('*.name').exists().withMessage('Le nom est requis.').isLength({ min: 2, max: 100 }).withMessage('Le nom doit comporter entre 2 et 100 caractères.').matches(/^[A-Za-z\s]+$/).withMessage('Le nom ne peut contenir que des lettres et des espaces.'),
-    body('*.email').exists().withMessage('L\'adresse e-mail est requise.').isEmail().withMessage('L\'adresse e-mail doit être valide.').normalizeEmail(),
+    body('*.email').exists().withMessage('L\'adresse e-mail est requise.').isEmail().withMessage('L\'adresse e-mail doit être valide.'),
     body('*.role')
   .exists().withMessage('Le rôle est requis.')
   .isIn(['admin', 'user', 'client', 'employe'])

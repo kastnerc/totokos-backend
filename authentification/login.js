@@ -28,7 +28,7 @@ export const login = async (req, res) => {
         if (!correctPassword) return res.status(401).json({ message: "The password is incorrect." });
 
         // Create access token with role and expiration
-        const payload = { id: user.id, role: user.role };
+        const payload = { id: user.id_user, role: user.role };
         const token = jwt.sign(payload, process.env.SECRET_KEY);
 
         res.status(200).json({ token });

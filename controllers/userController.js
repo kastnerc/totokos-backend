@@ -49,84 +49,156 @@ export const addUser = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-    const { id } = req.params;
+    console.log(req.user); // This will log the user from the decoded token
+
+    // Get the role and id from the decoded token
+    const { role, id } = req.user;
+
+    let userId;
+    if (role === 'client') {
+        userId = id; // Client can only delete their own user
+    } else if (role === 'employe') {
+        userId = req.params.id; // Employee can delete a user based on the provided id
+    }
+
+    console.log('User ID:', userId);
+
+    // If no userId is found, return an error response
+    if (!userId) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
 
     try {
         // Delete the user where the id matches
-        const result = await User.destroy({ where: { id_user: id } })
+        const result = await User.destroy({ where: { id_user: userId } });
+
+        if (result === 0) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
         res.status(200).json({ data: result, message: "User successfully deleted" });
     } catch (error) {
-        console.log('Error code : ' + error)
-        res.status(400).json({ message: error.message })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
 }
 
 export const findUser = async (req, res) => {
-    // Use the id (or other unique variable)
-    const { id } = req.params;
+    console.log(req.user); // This will log the user from the decoded token
+    
+    // Get the role and id from the decoded token
+    const { role, id } = req.user;
+
+    let userId;
+    if (role === 'client') {
+        userId = id; // Client should be able to find their own user
+    } else if (role === 'employe') {
+        userId = req.params.id; // Employee can look up a user by the provided id
+    }
+
+    console.log('User ID:', userId);
+
+    // If no userId is found, return an error response
+    if (!userId) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
+
     try {
-        // Fetch the user by its primary key (id)
-        const user = await User.findByPk(id);
+        // Fetch the user by its primary key (id_user)
+        const user = await User.findByPk(userId); // Use the userId variable here
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        // Send back the user data
         res.status(200).json({ data: user });
     } catch (error) {
-        console.log('Error code : ' + error)
-        res.status(400).json({ message: error.message })
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
 }
 
-
 export const updateUser = async (req, res) => {
-    // Use the id (or other unique variable)
-    const { id } = req.params;
-    // Retrieve the new user's information (form or postman)
-    const { password, ...restNewUser } = req.body;
+    console.log(req.user);
+    // Get the role from the decoded token
+    const { role, id } = req.user;
 
-    // Encrypt the password
-    const encryptedPassword = bcrypt.hashSync(password);
+    let userId;
+    if (role === 'client') {
+        userId = id;
+    } else if (role === 'employe') {
+        userId = req.params.id;
+    }
+    
+    console.log('User ID:', userId);
+
+    if (!userId) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
+
+    // Retrieve the new user's information (form or postman)
+    const { password, role: newRole, ...restNewUser } = req.body;
+
+    // Prevent role from being updated
+    if (newRole) {
+        return res.status(400).json({ message: "Role update is not allowed." });
+    }
+
+    // Encrypt the password if provided
+    let updateData = { ...restNewUser };
+    if (password) {
+        const encryptedPassword = bcrypt.hashSync(password);
+        updateData.password = encryptedPassword;
+    }
 
     try {
         // Update the user with the provided data where the id matches
-        const result = await User.update({ password: encryptedPassword, ...restNewUser }, { where: { id_user: id } });
+        const result = await User.update(updateData, { where: { id_user: userId } });
+
+        // Check if the user was found and updated
+        if (result[0] === 0) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+
         res.status(200).json({ data: result, message: "User updated" });
     } catch (error) {
         // In case of error
-        console.log('Error code : ' + error)
-        res.status(400).json({ message: error.message })
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
     }
 }
 
-// Function without bcrypt
-// export const updateUser = async (req, res) => {
-//     // Retrieve the user ID from the request parameters
-//     const { id } = req.params;
-//     // Retrieve the updated user information from the request body
-//     const updatedData = req.body;
-
-//     try {
-//         // Update the user with the provided data where the id matches
-//         const [updatedRows] = await User.update(updatedData, {
-//             where: { id_user: id }
-//         });
-
-//         // Check if any rows were updated
-//         if (updatedRows > 0) {
-//             res.status(200).json({ message: "User updated successfully" });
-//         } else {
-//             res.status(404).json({ message: "User not found or no changes made" });
-//         }
-//     } catch (error) {
-//         // In case of error
-//         console.log('Error code : ' + error);
-//         res.status(400).json({ message: error.message });
-//     }
-// };
-
 export const listOrdersByUser = async (req, res) => {
-    const { id_user } = req.params;
+    console.log(req.user); // Log the user from the decoded token
+
+    // Get the role and id from the decoded token
+    const { role, id } = req.user;
+
+    let userId;
+    if (role === 'client') {
+        userId = id; // Client can only fetch their own orders
+    } else if (role === 'employe') {
+        userId = req.params.id; // Employee can fetch orders of any user based on the id_user parameter
+    }
+
+    console.log('User ID:', userId);
+
+    // If no userId is found, return an error response
+    if (!userId) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
 
     try {
-        // Fetch the user by its primary key (id)
-        const user = await User.findByPk(id_user);
+        // Fetch the user by its primary key (id_user)
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
 
         // Get all orders associated with the user, including the products in each order
         const orders = await user.getOrders({

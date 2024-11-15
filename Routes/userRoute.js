@@ -11,7 +11,7 @@ route.get('/', checkToken, authorizeEmployee, getAllUsers)
 .get('/:id/orders', checkToken, listOrdersByUser)
 .get('/:id', checkToken, findUser)
 .post('/', validate(userRules), addUser)
-.patch('/:id', validate(userRules), checkToken, updateUser)
+.patch('/:id', checkToken, updateUser)
 .delete('/:id', checkToken, deleteUser)
 
 export default route
