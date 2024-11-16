@@ -5,13 +5,13 @@ import compression from "compression";
 import bodyParser from "body-parser";
 import dotenv from 'dotenv'
 import database from "./config/database.js";
-import ingredientRoute from "./routes/ingredientRoute.js";
-import orderRoute from "./routes/orderRoute.js";
-import product_categoryRoute from "./routes/product_categoryRoute.js";
-import productRoute from "./routes/productRoute.js";
+import ingredientRoute from "./Routes/ingredientRoute.js";
+import orderRoute from "./Routes/orderRoute.js";
+import product_categoryRoute from "./Routes/product_categoryRoute.js";
+import productRoute from "./Routes/productRoute.js";
 import supplierRoute from "./Routes/supplierRoute.js";
-import userRoute from "./routes/userRoute.js";
-import authRoute from "./routes/authRoute.js";
+import userRoute from "./Routes/userRoute.js";
+import authRoute from "./Routes/authRoute.js";
 
 // Start the connection
 const app = express()

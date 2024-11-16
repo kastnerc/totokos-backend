@@ -30,6 +30,7 @@ export const getProducts = async (req, res) => {
             page: parseInt(page),
             pages: Math.ceil(result.count / limit)
         });
+        
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -133,11 +134,13 @@ export const updateProduct = async (req, res) => {
     const { id } = req.params;
     const { product_name, product_price, description, stock, expiry_date, id_category } = req.body;
 
+    const id_product = parseInt(id);
+
     try {
         // Update the product with the provided data where the id matches
         const [updatedRows] = await Product.update(
             { product_name, product_price, description, stock, expiry_date, id_category },
-            { where: { id_product: id } }
+            { where: { id_product } }
         );
 
         if (updatedRows === 0) {
@@ -145,7 +148,7 @@ export const updateProduct = async (req, res) => {
         }
 
         // Fetch the updated product details
-        const updatedProduct = await Product.findByPk(id);
+        const updatedProduct = await Product.findByPk(id_product);
 
         if (!updatedProduct) {
             return res.status(404).json({ message: 'Product not found after update' });
