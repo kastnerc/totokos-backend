@@ -169,6 +169,12 @@ Below lies the request to delete any desired user. Use wisely.
 
 ![Screenshot 2024-11-15 235344](https://github.com/user-attachments/assets/0736c0a2-bb76-42cc-adbd-45e2192e0b34)
 
+### Unique Controllers
+
+Some controllers are unique to their model, and so deserve their place in this read.me. Here they are in order of appearance:
+
+
+
 ## Validations
 
 If someone wanted to update their email, they can't add something like "Jim", it has to look something like "Jim@outlook.com". That's what validations are for. When initiating a controller that requires a field, like a post or patch request, validations are put in place to make sure that the information inserted fits the formatting. Here are several examples:
@@ -214,8 +220,12 @@ The middleware imported makes sure that if any validations are failed, then this
 
 ![Screenshot 2024-11-16 004854](https://github.com/user-attachments/assets/982e08fa-66d7-4164-b1a7-2f18bf371ce0)
 
-## Config
+## Config and .ENV
 
-The config fils is used to give the proper information the database needs to start. It gives the database its destination, its port of use to connect online, and its dialect, which is a language the app uses to talk to the database with. Here it is below:
+The .ENV initiates the database's name, host, port and dialect instantly. It identifies the database for the config to use. Here's the .ENV below:
+
+![Screenshot 2024-11-16 005545](https://github.com/user-attachments/assets/dbdcff0d-cc7b-42c0-b6a9-fdd29688d8ee)
+
+The config fils is very similar to the .ENV, and is used to give the proper information the database needs to start. It gets the database its destination, its port of use to connect online, and its dialect, which is a language the app uses to talk to the database with. It gets the information from the.ENV directly. Here's the Config below:
 
 ![Screenshot 2024-11-16 005121](https://github.com/user-attachments/assets/a605e151-3a9e-4754-8359-e69cce94bc92)
