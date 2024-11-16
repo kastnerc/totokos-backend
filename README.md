@@ -269,3 +269,15 @@ The .ENV initiates the database's name, host, port and dialect instantly. It ide
 The config files is very similar to the .ENV, and is used to give the proper information the database needs to start. It gets the database its destination, its port of use to connect online, and its dialect, which is a language the app uses to talk to the database with. It gets the information from the .ENV directly. Here's the Config below:
 
 ![Screenshot 2024-11-16 005121](https://github.com/user-attachments/assets/a605e151-3a9e-4754-8359-e69cce94bc92)
+
+## Conclusion
+
+All in all, the database created by the team is compete, and await their grade from their teacher, expecting their work to be well rewarded. The database is fully functionnal, and is ready to be the backbone to the upcoming front-end application.
+
+### Links
+
+Totoko's Temptations:
+https://github.com/calebk5/Web-Client-UA3
+
+School's Program
+https://www.collegelacite.ca/programmes/51046
