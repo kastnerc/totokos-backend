@@ -170,7 +170,36 @@ Below lies the request to delete any desired user. Use wisely.
 ![Screenshot 2024-11-15 235344](https://github.com/user-attachments/assets/0736c0a2-bb76-42cc-adbd-45e2192e0b34)
 
 ## Validations
+
+If someone wanted to update their email, they can't add something like "Jim", it has to look something like "Jim@outlook.com". That's what validations are for. When initiating a controller that requires a field, like a post or patch request, validations are put in place to make sure that the information inserted fits the formatting. Here are several examples:
+
+### Validations for ingredients:
+
+![image](https://github.com/user-attachments/assets/2bcf34cc-b555-4a8d-85bb-8c4c8ed0708a)
+
+In the first validator, it forces the expiry date to look something like this: '2024-12-31', or even this: '2024-12-31T23:59:59.000Z'.
+
+![Screenshot 2024-11-16 000111](https://github.com/user-attachments/assets/10783898-8dc4-45ed-a9ca-ab8e2a24b9e2)
+
+In the second validator, it forces the price per unit to look like something like this: '19.99', '5', and even '1.241441'.
+
+![Screenshot 2024-11-16 000124](https://github.com/user-attachments/assets/ae08f526-06ce-482b-b02d-900a32f0ddba)
+
+In the third validator, it forces the unit measure to look like this: 'kg', 'oz', 'cups', 'tbsp', and even 'packet' and 'unit'.
+
+![Screenshot 2024-11-16 000139](https://github.com/user-attachments/assets/e23daa75-fbc9-467b-ac53-100adefa4cf4)
+
+Here are some more validators:
+
+![Screenshot 2024-11-16 000641](https://github.com/user-attachments/assets/64c438f5-21f7-4bfb-8b7f-c31547d49827)
+
 ## Middlewares
+
+
 ## Index
+
+
 ## Config
+
+
 
