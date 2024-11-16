@@ -1,16 +1,17 @@
-# Totoko's Backend - Second sommative assignement
+# Totoko's Backend - Second summative Assignment
 ### Created and published by Caleb Kastner, Georgio El-Khoury, and Tristan Bastien
 
-## Introduction
-The following project was created by the same team that developped Totoko's Temptations last semester. The team is consisted of Caleb Kastner, the project manager, Georgio El-Koury, the driver of the project, and Tristan Bastien, the lead creative developper. The three decided to take the same bakery as Totoko's Temptations, and create a backend database just as their teacher had asked. They had to make a back end database, which would be linked with a front end webpage they will develop later in the semester. 
+![Totokos Temptations Logo Website](https://github.com/calebk5/Web-Client/assets/145488814/710a1527-cb2e-4786-8a07-6891eaf5912f)
 
-## Database representation
+## Introduction
+The following project was created by the same team that developed Totoko's Temptations last semester. The team is consisted of Caleb Kastner, the project manager, Georgio El-Koury, the driver of the project, and Tristan Bastien, the lead creative developer. The three decided to take the same bakery as Totoko's Temptations and create a backend database just as their teacher had asked. They had to make a back-end database, which would be linked with a front-end webpage they will develop later in the semester. 
+
+## Database Representation
 The project was initially designed as a physical model. Here it is below.
 
 ![image](https://github.com/user-attachments/assets/b8668ce0-e633-4766-b68d-1b749fff2128)
 
 The model can be summed up in its nine tables:
-
 - User
 - Order
 - Order_Product
@@ -22,7 +23,7 @@ The model can be summed up in its nine tables:
 - Supplier
 
 ## Entity Relations
-The user table holds all user information, and is associated with the order table. Each user may have many orders. The order table is linked with the product table in a many-to-many way. Each order may have many products, and each kind of products can appear in many different orders. In the case of a many-to-many table relationship, an intermidiary table is added, such as Order_Product. The product has a price history. Each product can have their prices updated many times over, and so we sotre them there. The product also has its categories stored in a separate table, namely Product Category. The product table is then linked in another many-to-many relationship, bt this time with ingredient. As we all know, a product, like a bagel, is made up of many ingredients. ANd, each ingredient can appear in many differen kinds of products. The intermediary table called Product_Ingreident is then added as required. Ingredient holds the data of each ingredient used in the bakery, as it should. The last table is called suppliers. It holds the data of each supplier Totoko's Temptations' bakeries take their ingreidents from. As drawn in the diagram, one supplier can supply many different kinds of ingredients, but one ingredient can only be sold by one supplier at a time.
+The user table holds all user information and is associated with the order table. Each user may have many orders. The order table is linked with the product table in a many-to-many way. Each order may have many products, and each kind of products can appear in many different orders. In the case of a many-to-many table relationship, an intermediary table is added, such as Order_Product. The product has a price history. Each product can have their prices updated many times over, and so we store them there. The product also has its categories stored in a separate table, namely Product Category. The product table is then linked in another many-to-many relationship, but this time with ingredient. As we all know, a product, like a bagel, is made up of many ingredients. And each ingredient can appear in many different kinds of products. The intermediary table called Product_Ingreident is then added as required. Ingredient holds the data of each ingredient used in the bakery, as it should. The last table is called suppliers. It holds the data of each supplier Totoko's Temptations' bakeries take their ingredients from. As drawn in the diagram, one supplier can supply many kinds of ingredients, but one ingredient can only be sold by one supplier at a time.
 
 Here they are, added to our database in code form:
 
@@ -39,7 +40,7 @@ This model is an intermediary one, and so it only has the quantity attribute, an
 
 - ### Ingredient.js
 
-The Ingreident.js model holds the ingredient's name, stock, expiry date, price per unit, and unit of measure used to quantify the ingredient(kg, tbsp etc...).
+The Ingreident.js model holds the ingredient's name, stock, expiry date, price per unit, and unit of measure used to quantify the ingredient (kg, tbsp etc...).
 
 ![Screenshot 2024-11-15 204611](https://github.com/user-attachments/assets/cddc50db-5182-440e-b722-a5bc8eed83b7)
 
@@ -51,7 +52,7 @@ Yet again another intermediary model, it holds the basic quantity, and unit pric
 
 - ### Order.js
 
-Quite a hefty model, it contains its date of creation, iots total price, its status, which can only be one of the four following: 'in process', 'ready', 'picked up', and 'cancelled'. If a reservation is made, the attribute turns to true, and a pickup date is scheduled to let the employees know of the delayed delivery.
+Quite a hefty model, it contains its date of creation, its total price, its status, which can only be one of the four following: 'in process', 'ready', 'picked up', and 'cancelled'. If a reservation is made, the attribute turns to true, and a pickup date is scheduled to let the employees know of the delayed delivery.
 
 ![Screenshot 2024-11-15 204648](https://github.com/user-attachments/assets/183726de-4a46-4d17-b555-f43122d298db)
 
@@ -63,7 +64,7 @@ This model holds only the changed price and date the old price was updated.
 
 - ### Product_Category.js
 
-Product_Category.js golds the names and descriptions odf all the possible categories the products can have.
+Product_Category.js golds the names and descriptions of all the possible categories the products can have.
 
 ![Screenshot 2024-11-15 204721](https://github.com/user-attachments/assets/99212122-63a6-479a-b69b-0e9fad377e26)
 
@@ -75,19 +76,19 @@ This model holds the products' name, its price, its description, its stock value
 
 - ### Supplier.js
 
-The supplier's model holds their names, addrersses, emails, and even phone numbers to properly record each supplier in the database.
+The supplier's model holds their names, addresses, emails, and even phone numbers to properly record each supplier in the database.
 
 ![Screenshot 2024-11-15 204750](https://github.com/user-attachments/assets/4bb936b8-1d70-4b8e-9d68-82a4686bffd4)
 
 - ### User.js
 
-the final and heaviest of all models, this one holds very valueble information the database needs to run safely. It holds the following information for the users: Their name, surname, username, password, and contact information. The optionnal but still important attributes are as follow: last connection to the databse, adress, city, province, country, and postal code. The final attribute is by far the most important one: Role. This is used to tell the database which user has which permissions. Employees can create, modify and delete data, whil clients can only read and enter their own information and send their own orders. If a client could do what employees could, some people with malicious intent might destroy our database, and so the role and the login controller created below prevents that by adding security to our database.
+the final and heaviest of all models, this one holds very valuable information the database needs to run safely. It holds the following information for the users: Their name, surname, username, password, and contact information. The optional but still important attributes are as follow: last connection to the database, address, city, province, country, and postal code. The final attribute is by far the most important one: Role. This is used to tell the database which user has which permissions. Employees can create, modify and delete data, whil clients can only read and enter their own information and send their own orders. If a client could do what employees could, some people with malicious intent might destroy our database, and so the role and the login controller created below prevents that by adding security to our database.
 
 ![Screenshot 2024-11-15 204804](https://github.com/user-attachments/assets/bb4e9aa6-70b2-4797-bf8e-606ef2e29f11)
 
 ## Login and authentication
 ### Authentication
-This following page shows the authentication page, which checks if the entered email fits email formatting, and if it exists in the database, and adds it along with its password. the password is hashed, basicallu meaining it is rewritten into a new password that is very hard for humans to identify and manipulate.
+This following page shows the authentication page, which checks if the entered email fits email formatting, and if it exists in the database, and adds it along with its password. the password is hashed, basically meaning it is rewritten into a new password that is very hard for humans to identify and manipulate.
 
 ![Screenshot 2024-11-15 211924](https://github.com/user-attachments/assets/f72d9a77-4e5f-4f9f-ba84-ff553273bbf8)
 
@@ -96,7 +97,7 @@ This following page shows the authentication page, which checks if the entered e
 This next piece of code is like a security guard for your website or app. It checks if a person (a user) is allowed to do something, based on a secret code (the JWT token) that they send along with their request.
 
 Here's how it works:
-Someone tries to do something (like view their orders): They send a request to the app with a special ticket (called a token) in the header. This token proves they are who they say they are. The guard (this code) checks if the ticket is there: The guard looks at the request and checks if there’s a ticket (token) in it. If there’s no ticket, the guard says, "Hey, you can't come in!" and sends a message saying "Non authenticated" (which means you're not logged in). The guard checks if the ticket is in the right format: If the ticket is there, the guard makes sure it’s in the correct format. If it looks wrong, the guard says "Invalid token format" and sends them away. The guard verifies the ticket: Next, the guard checks if the ticket is real. They use a special secret (the SECRET_KEY) that only the app knows, to make sure the ticket is valid. If the ticket is fake or expired, the guard says "Unauthorized" and won’t let them in. The guard remembers who the person is: If the ticket is good, the guard looks inside the ticket and finds out who the person is (like their id and role, for example, if they’re an admin or a user). Then the guard says, "Okay, you can go in now!" and lets them through. The person can now do what they wanted: The app lets the person do what they came for, like checking their orders or viewing a product.
+Someone tries to do something (like view their orders): They send a request to the app with a special ticket (called a token) in the header. This token proves they are who they say they are. The guard (this code) checks if the ticket is there: The guard looks at the request and checks if there’s a ticket (token) in it. If there’s no ticket, the guard says, "Hey, you can't come in!" and sends a message saying, "Non authenticated" (which means you're not logged in). The guard checks if the ticket is in the right format: If the ticket is there, the guard makes sure it’s in the correct format. If it looks wrong, the guard says, "Invalid token format" and sends them away. The guard verifies the ticket: Next, the guard checks if the ticket is real. They use a special secret (the SECRET_KEY) that only the app knows, to make sure the ticket is valid. If the ticket is fake or expired, the guard says "Unauthorized" and won’t let them in. The guard remembers who the person is: If the ticket is good, the guard looks inside the ticket and finds out who the person is (like their id and role, for example, if they’re an admin or a user). Then the guard says, "Okay, you can go in now!" and lets them through. The person can now do what they wanted: The app lets the person do what they came for, like checking their orders or viewing a product.
 
 In summary:
 
@@ -112,7 +113,7 @@ It’s like a security guard who checks your ID (the token), makes sure it’s r
 
 ### Login
 
-And this final code in the authentication section is used to detect if a user has the role of an employee. if the user does not, then the progrm prevents them from commiting potentially harmful modifications to the database.
+And this final code in the authentication section is used to detect if a user has the role of an employee. if the user does not, then the program prevents them from committing potentially harmful modifications to the database.
 
 ![Screenshot 2024-11-15 222855](https://github.com/user-attachments/assets/0b6062f9-7aa9-497a-a968-2e5c0f581854)
 
@@ -132,9 +133,9 @@ Every controller in our database fall under one of these four. And for good reas
 
 ### GET
 
-The get request is the most popular and least impactful request a user can make the database undergo. It fecthes information from around the database, and writes it on-screen for the user to read.
+The get request is the most popular and least impactful request a user can make the database undergo. It fetches information from around the database and writes it on-screen for the user to read.
 
-As exaple, here is the ingredient's get request:
+As example, here is the ingredient's get request:
 
 ![Screenshot 2024-11-15 234650](https://github.com/user-attachments/assets/1dce0831-c2ef-47d4-83c3-b75810c6ffae)
 
@@ -162,13 +163,13 @@ As shown below, this request updates any price's history.
 
 ### DELETE
 
-The delete request is quite self-explanitory: it deletes information created by the user. This is the most destructive of all requests, and is only employed when necessary.
+The delete request is quite self-explanatory: it deletes information created by the user. This is the most destructive of all requests and is only employed when necessary.
 
 Below lies the request to delete any desired user. Use wisely.
 
 ![Screenshot 2024-11-15 235344](https://github.com/user-attachments/assets/0736c0a2-bb76-42cc-adbd-45e2192e0b34)
 
-### Unique Controllers
+### Advanced Controllers
 
 Some controllers are unique to their model, and so deserve their place in this read.me. Here they are in order of appearance:
 
@@ -180,25 +181,25 @@ This controller fetches the information of all the products linked in an order.
 
 ### deleteProductFromOrder
 
-This controller deletes any selected oproducts from the order they originate in.
+This controller deletes any selected products from the order they originate in.
 
 ![Screenshot 2024-11-16 010204](https://github.com/user-attachments/assets/1e464c93-ea25-4a59-8e9e-4dfe8a10d751)
 
 ### getProducts
 
-At first glance, this looks like another get request. But this get request is different than the other ones in the ProductController.js file; this one is specifically built for clients. It shows the clients only the products thay are allowed to view, keeping the other two get requests for employees, so that the clients don;t get so see the either unfinished products, or to hide some secret products, like limited edition christmas pastries, for example.
+At first glance, this looks like another get request. But this get request is different than the other ones in the ProductController.js file; this one is specifically built for clients. It shows the clients only the products that are allowed to view, keeping the other two get requests for employees, so that the clients don’t get so see the either unfinished products, or to hide some secret products, like limited edition Christmas pastries, for example.
 
 ![Screenshot 2024-11-16 010310](https://github.com/user-attachments/assets/c433c423-ab8d-4161-aee1-da7acb2f0bc5)
 
 ### listIngredientsByProductId
 
-This request simply fetches all of the ingredients listed in a specific product.
+This request simply fetches all the ingredients listed in a specific product.
 
 ![Screenshot 2024-11-16 010333](https://github.com/user-attachments/assets/98f3df3e-0497-495c-827e-630efb3f68eb)
 
 ### listPriceHistoryByProductId
 
-This request, similar to the one above, lists the price history for a selected product.
+This request, like the one above, lists the price history for a selected product.
 
 ![Screenshot 2024-11-16 010349](https://github.com/user-attachments/assets/7dbfe7ae-ddda-4799-963f-d9e9ac1fb218)
 
@@ -216,7 +217,7 @@ And for the final request, we have maybe the most important request for bakery e
 
 ## Validations
 
-If someone wanted to update their email, they can't add something like "Jim", it has to look something like "Jim@outlook.com". That's what validations are for. When initiating a controller that requires a field, like a post or patch request, validations are put in place to make sure that the information inserted fits the formatting. Here are several examples:
+If someone wanted to update their email, they can't add something like "Jim", it must look something like "Jim@outlook.com". That's what validations are for. When initiating a controller that requires a field, like a post or patch request, validations are put in place to make sure that the information inserted fits the formatting. Here are several examples:
 
 ### Validations for ingredients:
 
@@ -239,11 +240,11 @@ Here are some more validators:
 ![Screenshot 2024-11-16 000641](https://github.com/user-attachments/assets/64c438f5-21f7-4bfb-8b7f-c31547d49827)
 
 ## Routes
-In the database, files are all over the place, so how are they communicating between each other? This is where the routes folders come in. They oset the standard to how the applications interact, and which model contains which controller. Here's an example below of the UserRoutes.js:
+In the database, files are all over the place, so how are they communicating between each other? This is where the routes folders come in. They set the standard to how the applications interact, and which model contains which controller. Here's an example below of the UserRoutes.js:
 
 ![Screenshot 2024-11-16 004527](https://github.com/user-attachments/assets/dc118c50-2f0a-46d3-9855-ccc6b5e37609)
 
-As you can see from the first half, the controllers, validations and checkToken are imported, and the second half links them all together, so that the the website can use them to load the various pages to the user's screens.
+As you can see from the first half, the controllers, validations and checkToken are imported, and the second half links them all together, so that the website can use them to load the various pages to the user's screens.
 
 ## Index
 
@@ -265,6 +266,6 @@ The .ENV initiates the database's name, host, port and dialect instantly. It ide
 
 ![Screenshot 2024-11-16 005545](https://github.com/user-attachments/assets/dbdcff0d-cc7b-42c0-b6a9-fdd29688d8ee)
 
-The config fils is very similar to the .ENV, and is used to give the proper information the database needs to start. It gets the database its destination, its port of use to connect online, and its dialect, which is a language the app uses to talk to the database with. It gets the information from the.ENV directly. Here's the Config below:
+The config files is very similar to the .ENV, and is used to give the proper information the database needs to start. It gets the database its destination, its port of use to connect online, and its dialect, which is a language the app uses to talk to the database with. It gets the information from the .ENV directly. Here's the Config below:
 
 ![Screenshot 2024-11-16 005121](https://github.com/user-attachments/assets/a605e151-3a9e-4754-8359-e69cce94bc92)
