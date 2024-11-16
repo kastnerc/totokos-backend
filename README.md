@@ -193,13 +193,29 @@ Here are some more validators:
 
 ![Screenshot 2024-11-16 000641](https://github.com/user-attachments/assets/64c438f5-21f7-4bfb-8b7f-c31547d49827)
 
-## Middlewares
+## Routes
+In the database, files are all over the place, so how are they communicating between each other? This is where the routes folders come in. They oset the standard to how the applications interact, and which model contains which controller. Here's an example below of the UserRoutes.js:
 
+![Screenshot 2024-11-16 004527](https://github.com/user-attachments/assets/dc118c50-2f0a-46d3-9855-ccc6b5e37609)
+
+As you can see from the first half, the controllers, validations and checkToken are imported, and the second half links them all together, so that the the website can use them to load the various pages to the user's screens.
 
 ## Index
 
+The code needs a central area where all of the different parts of the code can be called, and activated. This is called the index. Here, all the necessary informations are imported from node, the routes are added, and the application is initiated, officially making our code run. Here it is below:
+
+![Screenshot 2024-11-16 004234](https://github.com/user-attachments/assets/d040e5f5-4f73-44e3-9f9a-fabefc922017)
+
+We aren't done, however. A few loose ends remain, so let's tie them up.
+
+## Middleware
+
+The middleware imported makes sure that if any validations are failed, then this returns the error message to the user. If this code runs and doesn't find any validation errors, then it lets the code going on its planned route. As you can see below, this is the only middle ware used in the project.
+
+![Screenshot 2024-11-16 004854](https://github.com/user-attachments/assets/982e08fa-66d7-4164-b1a7-2f18bf371ce0)
 
 ## Config
 
+The config fils is used to give the proper information the database needs to start. It gives the database its destination, its port of use to connect online, and its dialect, which is a language the app uses to talk to the database with. Here it is below:
 
-
+![Screenshot 2024-11-16 005121](https://github.com/user-attachments/assets/a605e151-3a9e-4754-8359-e69cce94bc92)
