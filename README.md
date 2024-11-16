@@ -133,13 +133,41 @@ Every controller in our database fall under one of these four. And for good reas
 
 ### GET
 
+The get request is the most popular and least impactful request a user can make the database undergo. It fecthes information from around the database, and writes it on-screen for the user to read.
+
+As exaple, here is the ingredient's get request:
+
+![Screenshot 2024-11-15 234650](https://github.com/user-attachments/assets/1dce0831-c2ef-47d4-83c3-b75810c6ffae)
+
+### GET BY ID
+
+Very similar to the get request, however this one searches for a precise amount of information, such as searching a supplier by using its ID, as shown below:
+
+![Screenshot 2024-11-15 234904](https://github.com/user-attachments/assets/35bec972-dea5-46ac-9ca7-3023da58a0bf)
+
 ### POST
+
+The post request is much more impactful than the get request, for it creates data for the database to store. This is rarely placed in the hands of the client, for it can create some very disruptive behaviour if handled incorrectly.
+
+The request below creates a product category for the products to identify by:
+
+![Screenshot 2024-11-15 235010](https://github.com/user-attachments/assets/e571fc3d-0162-431a-bfca-622cfe301574)
 
 ### PATCH
 
+The patch request is similar to the post request. It updates existing data. So if an employee wants to modify a product's price, they can do so using price history's patch requests.
+
+As shown below, this request updates any price's history.
+
+![Screenshot 2024-11-15 235140](https://github.com/user-attachments/assets/2431ae0e-c43b-4e04-9401-45a1314fc716)
+
 ### DELETE
 
+The delete request is quite self-explanitory: it deletes information created by the user. This is the most destructive of all requests, and is only employed when necessary.
 
+Below lies the request to delete any desired user. Use wisely.
+
+![Screenshot 2024-11-15 235344](https://github.com/user-attachments/assets/0736c0a2-bb76-42cc-adbd-45e2192e0b34)
 
 ## Validations
 ## Middlewares
