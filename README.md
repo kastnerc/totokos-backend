@@ -1,5 +1,4 @@
 # Totoko's Backend - Second sommative assignement
-## 
 ### Created and published by Caleb Kastner, Georgio El-Khoury, and Tristan Bastien
 
 ## Introduction
@@ -173,7 +172,47 @@ Below lies the request to delete any desired user. Use wisely.
 
 Some controllers are unique to their model, and so deserve their place in this read.me. Here they are in order of appearance:
 
+### getPtoductInfoByOrderId
 
+This controller fetches the information of all the products linked in an order.
+
+![Screenshot 2024-11-16 010146](https://github.com/user-attachments/assets/1501d4e3-7f98-474d-ab18-32b4a07712e4)
+
+### deleteProductFromOrder
+
+This controller deletes any selected oproducts from the order they originate in.
+
+![Screenshot 2024-11-16 010204](https://github.com/user-attachments/assets/1e464c93-ea25-4a59-8e9e-4dfe8a10d751)
+
+### getProducts
+
+At first glance, this looks like another get request. But this get request is different than the other ones in the ProductController.js file; this one is specifically built for clients. It shows the clients only the products thay are allowed to view, keeping the other two get requests for employees, so that the clients don;t get so see the either unfinished products, or to hide some secret products, like limited edition christmas pastries, for example.
+
+![Screenshot 2024-11-16 010310](https://github.com/user-attachments/assets/c433c423-ab8d-4161-aee1-da7acb2f0bc5)
+
+### listIngredientsByProductId
+
+This request simply fetches all of the ingredients listed in a specific product.
+
+![Screenshot 2024-11-16 010333](https://github.com/user-attachments/assets/98f3df3e-0497-495c-827e-630efb3f68eb)
+
+### listPriceHistoryByProductId
+
+This request, similar to the one above, lists the price history for a selected product.
+
+![Screenshot 2024-11-16 010349](https://github.com/user-attachments/assets/7dbfe7ae-ddda-4799-963f-d9e9ac1fb218)
+
+### listProductsByCategory
+
+This troublesome request fetches all the products inside a selected category.
+
+![Screenshot 2024-11-16 010456](https://github.com/user-attachments/assets/fa239f3b-928a-4b5f-87ab-8725fabd6f90)
+
+### listOrdersByUser
+
+And for the final request, we have maybe the most important request for bakery employees: the ability to orders based on their associated client. At first glance, this seems like another get request, but in hindsight, this helps the bakery keep track of the orders and their clients simultaneously. Very important for dealing with many orders at once.
+
+![Screenshot 2024-11-16 010541](https://github.com/user-attachments/assets/42cbe98d-f4a0-4d5f-8c35-889f17cff18d)
 
 ## Validations
 
