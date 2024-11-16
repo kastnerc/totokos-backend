@@ -117,5 +117,32 @@ And this final code in the authentication section is used to detect if a user ha
 
 ![Screenshot 2024-11-15 222855](https://github.com/user-attachments/assets/0b6062f9-7aa9-497a-a968-2e5c0f581854)
 
-##
+## Controllers
+
+Once a user has gone through the authentication, they are free to use the database as far as it permits them. They can do things like create an order, view their profile, view the products for sale, etc. These actions are coded as controllers in our database. There are more than 40 in our database, so we'll only mention the notable ones.
+
+### General Controllers
+
+Some controllers appear in many different files at once, so they've been narrowed down to the following four: 
+- get
+- post
+- patch
+- delete
+
+Every controller in our database fall under one of these four. And for good reason. Get is the most popular controller. It goes throughout the database, and collects information, and writes it for the user to read. This is also the least impactful controller, as no changes are being done. Post on the other hand, is responsible for creating information that the database stores deep in its memory. 
+
+### GET
+
+### POST
+
+### PATCH
+
+### DELETE
+
+
+
+## Validations
+## Middlewares
+## Index
+## Config
 
