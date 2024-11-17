@@ -147,12 +147,15 @@ The get request is the most popular and least impactful request a user can make 
 As example, here is the ingredient's get request:
 
 ![Screenshot 2024-11-15 234650](https://github.com/user-attachments/assets/1dce0831-c2ef-47d4-83c3-b75810c6ffae)
+![image](https://github.com/user-attachments/assets/0ca81e19-0ca9-44a9-bbc4-ed07c91367eb)
+
 
 ### GET BY ID
 
 Very similar to the get request, however this one searches for a precise amount of information, such as searching a supplier by using its ID, as shown below:
 
 ![Screenshot 2024-11-15 234904](https://github.com/user-attachments/assets/35bec972-dea5-46ac-9ca7-3023da58a0bf)
+![image](https://github.com/user-attachments/assets/30c36219-8e7c-42e6-9501-bd826654072d)
 
 ### POST
 
@@ -161,6 +164,7 @@ The post request is much more impactful than the get request, for it creates dat
 The request below creates a product category for the products to identify by:
 
 ![Screenshot 2024-11-15 235010](https://github.com/user-attachments/assets/e571fc3d-0162-431a-bfca-622cfe301574)
+![image](https://github.com/user-attachments/assets/682ac0a6-c7db-4181-b894-b02a32324d94)
 
 ### PATCH
 
@@ -169,6 +173,7 @@ The patch request is similar to the post request. It updates existing data. So i
 As shown below, this request updates any price's history.
 
 ![Screenshot 2024-11-15 235140](https://github.com/user-attachments/assets/2431ae0e-c43b-4e04-9401-45a1314fc716)
+![image](https://github.com/user-attachments/assets/a2702d3f-424a-423d-93e3-bd427f36d239)
 
 ### DELETE
 
@@ -177,46 +182,53 @@ The delete request is quite self-explanatory: it deletes information created by 
 Below lies the request to delete any desired user. Use wisely.
 
 ![Screenshot 2024-11-15 235344](https://github.com/user-attachments/assets/0736c0a2-bb76-42cc-adbd-45e2192e0b34)
+![image](https://github.com/user-attachments/assets/254accd1-f591-4de4-9eba-ee41331fd595)
 
 ### Advanced Controllers
 
 Some controllers are unique to their model, and so deserve their place in this read.me. Here they are in order of appearance:
 
-### getPtoductInfoByOrderId
+### getProductInfoByOrderId
 
 This controller fetches the information of all the products linked in an order.
 
 ![Screenshot 2024-11-16 010146](https://github.com/user-attachments/assets/1501d4e3-7f98-474d-ab18-32b4a07712e4)
+![image](https://github.com/user-attachments/assets/6ca61769-3cc0-4122-9044-b50c0578bdfc)
 
 ### deleteProductFromOrder
 
 This controller deletes any selected products from the order they originate in.
 
 ![Screenshot 2024-11-16 010204](https://github.com/user-attachments/assets/1e464c93-ea25-4a59-8e9e-4dfe8a10d751)
+![image](https://github.com/user-attachments/assets/97330d29-5e49-4a4a-ac48-69e55f2f1d44)
 
 ### getProducts
 
-At first glance, this looks like another get request. But this get request is different than the other ones in the ProductController.js file; this one is specifically built for clients. It shows the clients only the products that are allowed to view, keeping the other two get requests for employees, so that the clients don’t get so see the either unfinished products, or to hide some secret products, like limited edition Christmas pastries, for example.
+At first glance, this looks like another get request. But this get request is different than the other ones in the ProductController.js file; this one is specifically built for clients. It only shows the price and name, to be able to display this when looking at the products page, without the unnecessary details.
 
 ![Screenshot 2024-11-16 010310](https://github.com/user-attachments/assets/c433c423-ab8d-4161-aee1-da7acb2f0bc5)
+![image](https://github.com/user-attachments/assets/63f68cbc-8fd2-4637-96eb-04e1e31c3ba2)
 
 ### listIngredientsByProductId
 
 This request simply fetches all the ingredients listed in a specific product.
 
 ![Screenshot 2024-11-16 010333](https://github.com/user-attachments/assets/98f3df3e-0497-495c-827e-630efb3f68eb)
+![image](https://github.com/user-attachments/assets/1585db9d-a69b-459f-b63a-984dc11d3588)
 
 ### listPriceHistoryByProductId
 
 This request, like the one above, lists the price history for a selected product.
 
 ![Screenshot 2024-11-16 010349](https://github.com/user-attachments/assets/7dbfe7ae-ddda-4799-963f-d9e9ac1fb218)
+![image](https://github.com/user-attachments/assets/f9a20e2d-16e3-4587-b24e-8a3e910a8818)
 
 ### listProductsByCategory
 
 This troublesome request fetches all the products inside a selected category.
 
 ![Screenshot 2024-11-16 010456](https://github.com/user-attachments/assets/fa239f3b-928a-4b5f-87ab-8725fabd6f90)
+![image](https://github.com/user-attachments/assets/f6854a9d-685b-4cf6-9f5c-e72ac0822dc5)
 
 ### listOrdersByUser
 
