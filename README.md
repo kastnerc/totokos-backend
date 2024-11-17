@@ -24,7 +24,6 @@ Next, we created the physical model. Here it is below.
 The model can be summed up in its nine tables:
 - User
 - Order
-- Order_Product
 - Product
 - Price_History
 - Product Category
