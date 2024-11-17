@@ -9,6 +9,14 @@ The following project was created by the same team that developed Totoko's Tempt
 ## Database Representation
 The project was initially designed as a Entity-Relationship Model (ERM). Here it is below.
 ![Screenshot 2024-11-16 164310](https://github.com/user-attachments/assets/5147d951-0e1c-4fba-b521-72898aa86223)
+The model can be summed up in its nine tables:
+- User
+- Order
+- Product
+- Price_History
+- Product Category
+- Ingredient
+- Supplier
 
 Next, we created the physical model. Here it is below.
 ![image](https://github.com/user-attachments/assets/b8668ce0-e633-4766-b68d-1b749fff2128)
