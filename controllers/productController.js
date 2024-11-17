@@ -1,24 +1,23 @@
-import { Product, Ingredient, Ingredient_Product, Price_History } from '../relationships/Relations.js'
+import { Product, Ingredient, Ingredient_Product, Price_History, Product_Category } from '../relationships/Relations.js'
 import { Op } from 'sequelize';
 
-export const getProducts = async (req, res) => {
+export const getProductNamesPrices = async (req, res) => {
     const { page = 1, limit = 10, ...filters } = req.query;
 
     try {
         const offset = (page - 1) * limit;
         const where = {};
 
-        // Ajouter des filtres dynamiques pour chaque champ
         for (const [key, value] of Object.entries(filters)) {
-            if (Product.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+            if (Product.rawAttributes[key]) {
                 where[key] = {
                     [Op.like]: `%${value}%`
                 };
             }
         }
 
-        // Récupérer les produits avec pagination et filtrage
         const result = await Product.findAndCountAll({
+            attributes: ['product_name', 'product_price'], // Only select product_name and product_price
             where,
             limit: parseInt(limit),
             offset: parseInt(offset)
@@ -172,15 +171,12 @@ export const deleteProduct = async (req, res) => {
     const { id } = req.params;
 
     try {
-        // Check if the product exists
         const product = await Product.findByPk(id);
 
         if (!product) {
-            // If the product is not found, return a 404 response
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Optionally delete associated price history records for the product
         await Price_History.destroy({ where: { id_product: id } });
 
         // Delete the product where the id matches

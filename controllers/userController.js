@@ -9,16 +9,14 @@ export const getAllUsers = async (req, res) => {
         const offset = (page - 1) * limit;
         const where = {};
 
-        // Ajouter des filtres dynamiques pour chaque champ
         for (const [key, value] of Object.entries(filters)) {
-            if (User.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+            if (User.rawAttributes[key]) {
                 where[key] = {
                     [Op.like]: `%${value}%`
                 };
             }
         }
 
-        // Récupérer les utilisateurs avec pagination et filtrage
         const result = await User.findAndCountAll({
             where,
             limit: parseInt(limit),
@@ -73,9 +71,8 @@ export const addUser = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-    console.log(req.user); // This will log the user from the decoded token
+    console.log(req.user);
 
-    // Get the role and id from the decoded token
     const { role, id } = req.user;
 
     let userId;
@@ -87,7 +84,6 @@ export const deleteUser = async (req, res) => {
 
     console.log('User ID:', userId);
 
-    // If no userId is found, return an error response
     if (!userId) {
         return res.status(400).json({ message: "User ID is required." });
     }
@@ -102,16 +98,14 @@ export const deleteUser = async (req, res) => {
 
         res.status(200).json({ data: result, message: "User successfully deleted" });
     } catch (error) {
-        // In case of error
         console.log('Error code : ' + error);
         res.status(400).json({ message: error.message });
     }
 }
 
 export const findUser = async (req, res) => {
-    console.log(req.user); // This will log the user from the decoded token
+    console.log(req.user);
     
-    // Get the role and id from the decoded token
     const { role, id } = req.user;
 
     let userId;
@@ -139,7 +133,6 @@ export const findUser = async (req, res) => {
         // Send back the user data
         res.status(200).json({ data: user });
     } catch (error) {
-        // In case of error
         console.log('Error code : ' + error);
         res.status(400).json({ message: error.message });
     }
@@ -182,7 +175,6 @@ export const updateUser = async (req, res) => {
         // Update the user with the provided data where the id matches
         const result = await User.update(updateData, { where: { id_user: userId } });
 
-        // Check if the user was found and updated
         if (result[0] === 0) {
             return res.status(404).json({ message: "User not found." });
         }
@@ -190,52 +182,53 @@ export const updateUser = async (req, res) => {
 
         res.status(200).json({ data: result, message: "User updated" });
     } catch (error) {
-        // In case of error
         console.log('Error code : ' + error);
         res.status(400).json({ message: error.message });
     }
 }
 
 export const listOrdersByUser = async (req, res) => {
-    console.log(req.user); // Log the user from the decoded token
+    console.log('Decoded user:', req.user);
 
-    // Get the role and id from the decoded token
     const { role, id } = req.user;
 
     let userId;
     if (role === 'client') {
         userId = id; // Client can only fetch their own orders
     } else if (role === 'employe') {
-        userId = req.params.id; // Employee can fetch orders of any user based on the id_user parameter
+        userId = req.params.id; // Employee can fetch any user's orders
     }
 
-    console.log('User ID:', userId);
-
-    // If no userId is found, return an error response
     if (!userId) {
         return res.status(400).json({ message: "User ID is required." });
     }
 
     try {
-        // Fetch the user by its primary key (id_user)
+        // Fetch user by primary key
         const user = await User.findByPk(userId);
 
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
 
-        // Get all orders associated with the user, including the products in each order
+        // Fetch orders and include associated products
         const orders = await user.getOrders({
             include: [
                 {
                     model: Order_Product,
-                    include: [Product]
+                    include: [
+                        {
+                            model: Product,
+                            attributes: ['id_product', 'product_name', 'product_price']
+                        }
+                    ]
                 }
             ]
         });
 
-        res.status(200).json({ data: orders });
+        return res.status(200).json({ data: orders });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Error fetching orders:', error);
+        return res.status(500).json({ message: 'Server error' });
     }
-}
+};

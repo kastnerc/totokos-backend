@@ -8,16 +8,14 @@ export const getProductCategories = async (req, res) => {
         const offset = (page - 1) * limit;
         const where = {};
 
-        // Ajouter des filtres dynamiques pour chaque champ
         for (const [key, value] of Object.entries(filters)) {
-            if (Product_Category.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+            if (Product_Category.rawAttributes[key]) {
                 where[key] = {
                     [Op.like]: `%${value}%`
                 };
             }
         }
 
-        // Récupérer les catégories de produits avec pagination et filtrage
         const result = await Product_Category.findAndCountAll({
             where,
             limit: parseInt(limit),

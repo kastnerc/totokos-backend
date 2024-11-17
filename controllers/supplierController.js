@@ -7,24 +7,21 @@ export const getSuppliers = async (req, res) => {
     try {
         const offset = (page - 1) * limit;
         const where = {};
-
-        // Ajouter des filtres dynamiques pour chaque champ
+        
         for (const [key, value] of Object.entries(filters)) {
-            if (Supplier.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+            if (Supplier.rawAttributes[key]) {
                 where[key] = {
                     [Op.like]: `%${value}%`
                 };
             }
         }
 
-        // Récupérer les fournisseurs avec pagination et filtrage
         const result = await Supplier.findAndCountAll({
             where,
             limit: parseInt(limit),
             offset: parseInt(offset)
         });
 
-        // Envoyer la réponse avec les fournisseurs paginés
         res.status(200).json({
             data: result.rows,
             total: result.count,

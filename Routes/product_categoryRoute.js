@@ -5,7 +5,6 @@ import { authorizeEmployee } from "../authentification/authorization.js";
 import { validate } from "../middlewares/validate.js";
 import product_categoryRules from "../validations/product_categoryValidations.js";
 
-
 const route = Router()
 
 route.get('/', getProductCategories)

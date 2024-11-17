@@ -11,7 +11,7 @@ const Price_History = database.define('Price_History', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Products',  // Assurez-vous que la table Products existe
+            model: 'Products',
             key: 'id_product',
         },
     },

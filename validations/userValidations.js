@@ -1,27 +1,26 @@
 import { body } from "express-validator";
 
 const userRules = [
-    body('*.username').exists().withMessage('Le nom d\'utilisateur est requis.')
+    body('*.username').exists().withMessage('The username is required.')
     .isLength({ min: 3, max: 50 })
-    .withMessage('Le nom d\'utilisateur doit comporter entre 3 et 50 caractères.')
+    .withMessage('The username must be between 3 and 50 characters long.')
     .matches(/^[A-Za-z0-9_-]+$/)
-    .withMessage('Le nom d\'utilisateur ne peut contenir que des lettres, des chiffres, des tirets et des underscores.'),
-    body('*.password').exists().withMessage('Le mot de passe est requis.').isLength({ min: 8 }).withMessage('Le mot de passe doit comporter au moins 8 caractères.').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/)
-    .withMessage('Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre.'),
-    body('*.surname').exists().withMessage('Le prénom est requis.').isLength({ min: 2, max: 100 }).withMessage('Le prénom doit comporter entre 2 et 100 caractères.').matches(/^[A-Za-z\s]+$/).withMessage('Le prénom ne peut contenir que des lettres et des espaces.'),
-    body('*.name').exists().withMessage('Le nom est requis.').isLength({ min: 2, max: 100 }).withMessage('Le nom doit comporter entre 2 et 100 caractères.').matches(/^[A-Za-z\s]+$/).withMessage('Le nom ne peut contenir que des lettres et des espaces.'),
-    body('*.email').exists().withMessage('L\'adresse e-mail est requise.').isEmail().withMessage('L\'adresse e-mail doit être valide.'),
+    .withMessage('The username can only contain letters, numbers, hyphens, and underscores.'),
+    body('*.password').exists().withMessage('The password is required.').isLength({ min: 8 }).withMessage('The password must be at least 8 characters long.').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/)
+    .withMessage('The password must contain at least one uppercase letter, one lowercase letter, and one number.'),
+    body('*.surname').exists().withMessage('The surname is required.').isLength({ min: 2, max: 100 }).withMessage('The surname must be between 2 and 100 characters long.').matches(/^[A-Za-z\s]+$/).withMessage('The surname can only contain letters and spaces.'),
+    body('*.name').exists().withMessage('The name is required.').isLength({ min: 2, max: 100 }).withMessage('The name must be between 2 and 100 characters long.').matches(/^[A-Za-z\s]+$/).withMessage('The name can only contain letters and spaces.'),
+    body('*.email').exists().withMessage('The email address is required.').isEmail().withMessage('The email address must be valid.'),
     body('*.role')
-  .exists().withMessage('Le rôle est requis.')
+  .exists().withMessage('The role is required.')
   .isIn(['admin', 'user', 'client', 'employe'])
-  .withMessage('Le rôle doit être "admin", "user", "client" ou "employe".'),
-    body('*.contact_info').exists().matches(/^(\+?\d{1,4}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/).withMessage('Les informations de contact doivent être un numéro de téléphone valide.'),
-    body('*.address').optional().isLength({ min: 5, max: 255 }).withMessage('L\'adresse doit comporter entre 5 et 255 caractères.'),
-    body('*.city').optional().isLength({ min: 2, max: 100 }).withMessage('La ville doit comporter entre 2 et 100 caractères.').matches(/^[A-Za-z\s]+$/).withMessage('La ville ne peut contenir que des lettres et des espaces.'),
-    body('*.province').optional().isLength({ min: 2, max: 100 }).withMessage('La province doit comporter entre 2 et 100 caractères.').matches(/^[A-Za-z\s]+$/).withMessage('La province ne peut contenir que des lettres et des espaces.'),
-    body('*.country').optional().isLength({ min: 2, max: 100 }).withMessage('Le pays doit comporter entre 2 et 100 caractères.').matches(/^[A-Za-z\s]+$/).withMessage('Le pays ne peut contenir que des lettres et des espaces.'),
-    body('*.postal_code').optional().matches(/^[A-Za-z0-9\s-]+$/).withMessage('Le code postal doit être valide.').isLength({ min: 5, max: 10 }).withMessage('Le code postal doit comporter entre 5 et 10 caractères.')
+  .withMessage('The role must be "admin", "user", "client", or "employe".'),
+    body('*.contact_info').exists().matches(/^(\+?\d{1,4}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/).withMessage('The contact info must be a valid phone number.'),
+    body('*.address').optional().isLength({ min: 5, max: 255 }).withMessage('The address must be between 5 and 255 characters long.'),
+    body('*.city').optional().isLength({ min: 2, max: 100 }).withMessage('The city must be between 2 and 100 characters long.').matches(/^[A-Za-z\s]+$/).withMessage('The city can only contain letters and spaces.'),
+    body('*.province').optional().isLength({ min: 2, max: 100 }).withMessage('The province must be between 2 and 100 characters long.').matches(/^[A-Za-z\s]+$/).withMessage('The province can only contain letters and spaces.'),
+    body('*.country').optional().isLength({ min: 2, max: 100 }).withMessage('The country must be between 2 and 100 characters long.').matches(/^[A-Za-z\s]+$/).withMessage('The country can only contain letters and spaces.'),
+    body('*.postal_code').optional().matches(/^[A-Za-z0-9\s-]+$/).withMessage('The postal code must be valid.').isLength({ min: 5, max: 10 }).withMessage('The postal code must be between 5 and 10 characters long.')
 ];
 
 export default userRules;
-

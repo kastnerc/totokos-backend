@@ -8,16 +8,14 @@ export const getOrders = async (req, res) => {
         const offset = (page - 1) * limit;
         const where = {};
 
-        // Ajouter des filtres dynamiques pour chaque champ
         for (const [key, value] of Object.entries(filters)) {
-            if (Order.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+            if (Order.rawAttributes[key]) {
                 where[key] = {
                     [Op.like]: `%${value}%`
                 };
             }
         }
 
-        // Récupérer les commandes avec pagination et filtrage
         const result = await Order.findAndCountAll({
             where,
             limit: parseInt(limit),
@@ -56,51 +54,50 @@ export const deleteOrder = async (req, res) => {
     }
 }
 
-export const createOrder = async (req, res) => {
-    // Retrieve the new orders' information (array of order objects)
+export const createOrder = async (req, res) => { 
     const orders = req.body;
 
-    // Validate if the input is an array and it's not empty
+    // Validate input
     if (!Array.isArray(orders) || orders.length === 0) {
         return res.status(400).json({ message: "No orders provided or invalid data format." });
     }
 
     try {
-        // Create each order and associate products
         const createdOrders = [];
-        for (const order of orders) {
-            const { id_client, products, pickup_date } = order;
 
-            // Validate presence of id_client and products
-            if (!id_client || !Array.isArray(products) || products.length === 0) {
-                console.log("Missing id_client or products in order:", order);
-                continue; // Skip this order if missing required fields
+        for (const order of orders) {
+            const { id_user, products, pickup_date } = order;
+
+            // Validate required fields
+            if (!id_user || !Array.isArray(products) || products.length === 0) {
+                console.log("Missing id_user or products in order:", order);
+                continue;
             }
 
-            // Calculate the total price of the order
+            // Calculate total price
             let total_price = 0;
+
             for (const product of products) {
                 const { id_product, quantity } = product;
 
-                // Validate required fields for each product
                 if (!id_product || !quantity) {
-                    console.log("Missing productId or quantity for product:", product);
-                    continue; // Skip this product if any required fields are missing
+                    console.log("Missing id_product or quantity for product:", product);
+                    continue;
                 }
 
-                // Fetch the product price
                 const productData = await Product.findByPk(id_product);
+
                 if (!productData) {
                     console.log("Product not found:", id_product);
-                    continue; // Skip this product if not found
+                    continue;
                 }
 
                 total_price += productData.product_price * quantity;
             }
 
-            // Create the order with the id_client, order_date, total_price, and pickup_date
+            // Create the order
             const newOrder = await Order.create({
-                id_client,
+                id_user,
                 order_date: new Date(),
                 total_price,
                 status: 'in process',
@@ -110,11 +107,9 @@ export const createOrder = async (req, res) => {
 
             console.log('Order created:', newOrder);
 
-            // Add each product to the order
             for (const product of products) {
                 const { id_product, quantity } = product;
 
-                // Add the product to the order
                 await Order_Product.create({
                     id_order: newOrder.id_order,
                     id_product,
@@ -124,33 +119,31 @@ export const createOrder = async (req, res) => {
                 console.log('Product added to order:', { id_order: newOrder.id_order, id_product, quantity });
             }
 
-            // Add the created order to the response
             createdOrders.push({
                 id_order: newOrder.id_order,
-                id_client: newOrder.id_client,
+                id_user: newOrder.id_user,
                 order_date: newOrder.order_date,
                 total_price: newOrder.total_price,
                 status: newOrder.status,
                 reservation: newOrder.reservation,
                 pickup_date: newOrder.pickup_date,
-                products: products
+                products
             });
         }
 
-        // Respond with the created orders
         res.status(201).json({ data: createdOrders, message: "Orders created successfully" });
     } catch (error) {
-        console.log('Error during order creation:', error);
-        res.status(500).json({ message: error.message });
+        console.error('Error during order creation:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
 export const getProductInfoByOrderId = async (req, res) => {
-    const { id:orderId } = req.params;
+    const { id } = req.params;
 
     try {
         // Fetch the order by its primary key (id)
-        const order = await Order.findByPk(orderId);
+        const order = await Order.findByPk(id);
         console.log("produits", order)
         // Get all products associated with the order
         const products = await order.getProducts();
@@ -198,7 +191,7 @@ export const deleteProductFromOrder = async (req, res) => {
         }
 
         // Check if the product exists in the order
-        const orderProduct = await Order_Product.findOne({ where: { orderId: orderId, productId: productId } });
+        const orderProduct = await Order_Product.findOne({ where: { id_order: orderId, id_product: productId } });
         if (!orderProduct) {
             return res.status(404).json({ message: 'Product not found in the order' });
         }

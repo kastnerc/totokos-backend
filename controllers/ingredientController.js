@@ -8,16 +8,14 @@ export const getIngredients = async (req, res) => {
         const offset = (page - 1) * limit;
         const where = {};
 
-        // Ajouter des filtres dynamiques pour chaque champ
         for (const [key, value] of Object.entries(filters)) {
-            if (Ingredient.rawAttributes[key]) { // Vérifiez si la colonne existe dans le modèle
+            if (Ingredient.rawAttributes[key]) {
                 where[key] = {
                     [Op.like]: `%${value}%`
                 };
             }
         }
 
-        // Récupérer les ingrédients avec pagination et filtrage
         const result = await Ingredient.findAndCountAll({
             where,
             limit: parseInt(limit),

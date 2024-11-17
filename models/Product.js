@@ -8,7 +8,7 @@ const Product = database.define('Product', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        field: 'id_product' // Si la base utilise des underscores
+        field: 'id_product'
     },
     id_category: {
         type: DataTypes.INTEGER,
@@ -18,7 +18,7 @@ const Product = database.define('Product', {
         },
     },
     product_name: DataTypes.STRING,
-    product_price: { // Vérifiez ici
+    product_price: {
         type: DataTypes.DECIMAL,
         allowNull: false,
     },

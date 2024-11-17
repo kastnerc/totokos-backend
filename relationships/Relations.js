@@ -15,6 +15,7 @@ User.hasMany(Order,{
         name: 'id_order',
         allowNull:false}
     })
+
 Order.belongsTo(User)
 
 

@@ -5,7 +5,6 @@ import { checkToken } from "../authentification/checkToken.js";
 import { validate } from "../middlewares/validate.js";
 import supplierRules from "../validations/supplierValidations.js";
 
-
 const route = Router()
 
 route.use(checkToken, authorizeEmployee)

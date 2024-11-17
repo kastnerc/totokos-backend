@@ -15,6 +15,6 @@ route.get('/', authorizeEmployee, getOrders)
     .post('/', validate(orderRules), createOrder)
     .patch('/:id', authorizeEmployee, updateOrder)    
     .delete('/:id', authorizeEmployee, deleteOrder)
-    .delete('/:id/product/:id', authorizeEmployee, deleteProductFromOrder)
+    .delete('/:orderId/product/:productId', authorizeEmployee, deleteProductFromOrder)
 
 export default route;

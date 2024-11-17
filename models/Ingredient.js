@@ -7,7 +7,7 @@ const Ingredient = database.define('Ingredient', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        field: 'id_ingredient' // Correspondance si nécessaire
+        field: 'id_ingredient'
     },
     id_supplier: {
         type: DataTypes.INTEGER,

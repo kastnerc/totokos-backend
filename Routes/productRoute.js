@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProducts, getAllProducts, getProductById, addProduct, updateProduct, deleteProduct, listIngredientsByProductId, listPriceHistoryByProductId, addIngredientToProduct, updateIngredientOfProduct, deleteIngredientFromProduct, listProductsByCategory } from "../controllers/productController.js";
+import { getProductNamesPrices, getAllProducts, getProductById, addProduct, updateProduct, deleteProduct, listIngredientsByProductId, listPriceHistoryByProductId, addIngredientToProduct, updateIngredientOfProduct, deleteIngredientFromProduct, listProductsByCategory } from "../controllers/productController.js";
 import { checkToken } from "../authentification/checkToken.js";
 import { authorizeEmployee } from "../authentification/authorization.js";	
 import { validate } from "../middlewares/validate.js";
@@ -7,7 +7,7 @@ import productRules from "../validations/productValidations.js";
 
 const route = Router()
 
-route.get('/product-page/', getProducts)
+route.get('/product-page/', getProductNamesPrices)
 .get('/', getAllProducts)
 .get('/:id', getProductById)
 .get('/:id/ingredients', checkToken, authorizeEmployee, listIngredientsByProductId)
