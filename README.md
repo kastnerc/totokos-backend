@@ -262,13 +262,13 @@ Here are some more validators:
 
 ## Pagination:
 Pagination allows limiting the number of items displayed per page by including data in the URL.
-Here are some examples below:
-
-
+Here is an example below:
+![image](https://github.com/user-attachments/assets/0538ba6b-a6ed-4695-9f6c-0d849444266c)
 
 ## Query variables:
 Query variables allow filtering elements of the request directly by including them in the URL.
-Here are some examples below:
+Here is an example below:
+![image](https://github.com/user-attachments/assets/b0dccd1d-0353-4a36-ac8f-aa63a4c5382b)
 
 ## Routes
 In the database, files are all over the place, so how are they communicating between each other? This is where the routes folders come in. They set the standard to how the applications interact, and which model contains which controller. Here's an example below of the UserRoutes.js:
