@@ -7,8 +7,10 @@
 The following project was created by the same team that developed Totoko's Temptations last semester. The team is consisted of Caleb Kastner, the project manager, Georgio El-Koury, the driver of the project, and Tristan Bastien, the lead creative developer. The three decided to take the same bakery as Totoko's Temptations and create a backend database just as their teacher had asked. They had to make a back-end database, which would be linked with a front-end webpage they will develop later in the semester. 
 
 ## Database Representation
-The project was initially designed as a physical model. Here it is below.
+The project was initially designed as a Entity-Relationship Model (ERM). Here it is below.
+![Screenshot 2024-11-16 164310](https://github.com/user-attachments/assets/5147d951-0e1c-4fba-b521-72898aa86223)
 
+Next, we created the physical model. Here it is below.
 ![image](https://github.com/user-attachments/assets/b8668ce0-e633-4766-b68d-1b749fff2128)
 
 The model can be summed up in its nine tables:
@@ -238,6 +240,16 @@ In the third validator, it forces the unit measure to look like this: 'kg', 'oz'
 Here are some more validators:
 
 ![Screenshot 2024-11-16 000641](https://github.com/user-attachments/assets/64c438f5-21f7-4bfb-8b7f-c31547d49827)
+
+## Pagination:
+Pagination allows limiting the number of items displayed per page by including data in the URL.
+Here are some examples below:
+
+
+
+## Query variables:
+Query variables allow filtering elements of the request directly by including them in the URL.
+Here are some examples below:
 
 ## Routes
 In the database, files are all over the place, so how are they communicating between each other? This is where the routes folders come in. They set the standard to how the applications interact, and which model contains which controller. Here's an example below of the UserRoutes.js:
