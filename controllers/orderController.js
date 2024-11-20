@@ -54,8 +54,9 @@ export const deleteOrder = async (req, res) => {
     }
 }
 
-export const createOrder = async (req, res) => { 
+export const createOrder = async (req, res) => {
     const orders = req.body;
+    const { id: userIdUser } = req.user; // Utilisez userIdUser comme clé étrangère
 
     // Validate input
     if (!Array.isArray(orders) || orders.length === 0) {
@@ -66,11 +67,11 @@ export const createOrder = async (req, res) => {
         const createdOrders = [];
 
         for (const order of orders) {
-            const { id_user, products, pickup_date } = order;
+            const { products, pickup_date } = order;
 
             // Validate required fields
-            if (!id_user || !Array.isArray(products) || products.length === 0) {
-                console.log("Missing id_user or products in order:", order);
+            if (!Array.isArray(products) || products.length === 0) {
+                console.log("Missing products in order:", order);
                 continue;
             }
 
@@ -95,9 +96,9 @@ export const createOrder = async (req, res) => {
                 total_price += productData.product_price * quantity;
             }
 
-            // Create the order
+            // Create the order with the correct foreign key column
             const newOrder = await Order.create({
-                id_user,
+                userIdUser, // Utilisez la colonne userIdUser pour l'association
                 order_date: new Date(),
                 total_price,
                 status: 'in process',
@@ -121,7 +122,7 @@ export const createOrder = async (req, res) => {
 
             createdOrders.push({
                 id_order: newOrder.id_order,
-                id_user: newOrder.id_user,
+                userIdUser: newOrder.userIdUser, // Affichez l'ID utilisateur depuis la bonne colonne
                 order_date: newOrder.order_date,
                 total_price: newOrder.total_price,
                 status: newOrder.status,
@@ -131,12 +132,13 @@ export const createOrder = async (req, res) => {
             });
         }
 
-        res.status(201).json({ data: createdOrders, message: "Orders created successfully" });
+        res.status(201).json({ data: createdOrders, message: "Orders created successfully", userIdUser });
     } catch (error) {
         console.error('Error during order creation:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
 
 export const getProductInfoByOrderId = async (req, res) => {
     const { id } = req.params;

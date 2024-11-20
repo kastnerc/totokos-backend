@@ -10,13 +10,16 @@ import Supplier from "../models/Supplier.js";
 import Price_History from "../models/Price_History.js";
 
 // Associations
-User.hasMany(Order,{
-    foreignKey:{
-        name: 'id_order',
-        allowNull:false}
-    })
+User.hasMany(Order, {
+    foreignKey: {
+        name: 'userIdUser', // Utilisez le bon nom de la clé étrangère
+        allowNull: false,
+    }
+});
 
-Order.belongsTo(User)
+Order.belongsTo(User, {
+    foreignKey: 'userIdUser' // Correspond à la clé étrangère dans la table Orders
+});
 
 
 Order.hasMany(Order_Product)
