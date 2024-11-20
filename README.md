@@ -125,6 +125,10 @@ It’s like a security guard who checks your ID (the token), makes sure it’s r
 And this final code in the authentication section is used to detect if a user has the role of an employee. if the user does not, then the program prevents them from committing potentially harmful modifications to the database.
 
 ![Screenshot 2024-11-15 222855](https://github.com/user-attachments/assets/0b6062f9-7aa9-497a-a968-2e5c0f581854)
+![Screenshot 2024-11-19 230122](https://github.com/user-attachments/assets/7a031c0c-05fd-4ca5-b1a5-a3788c1b48e1)
+
+
+The login function handles user authentication. It validates the email format and checks if the provided email exists in the database. If the user is found, it compares the provided password with the stored hashed password. If the password is correct, a JWT token is generated containing the user's ID and role, which is then returned in the response. This token can be used for subsequent authenticated requests.
 
 ## Controllers
 
@@ -149,6 +153,8 @@ As example, here is the ingredient's get request:
 ![Screenshot 2024-11-15 234650](https://github.com/user-attachments/assets/1dce0831-c2ef-47d4-83c3-b75810c6ffae)
 ![image](https://github.com/user-attachments/assets/0ca81e19-0ca9-44a9-bbc4-ed07c91367eb)
 
+The getIngredients function retrieves a paginated list of ingredients based on optional filters provided in the query parameters. It applies filtering criteria on valid ingredient fields and returns a JSON response containing the filtered ingredients, total count, current page, and total pages. Each ingredient in the response includes its details such as name, quantity, or other attributes.
+
 
 ### GET BY ID
 
@@ -156,6 +162,8 @@ Very similar to the get request, however this one searches for a precise amount 
 
 ![Screenshot 2024-11-15 234904](https://github.com/user-attachments/assets/35bec972-dea5-46ac-9ca7-3023da58a0bf)
 ![image](https://github.com/user-attachments/assets/30c36219-8e7c-42e6-9501-bd826654072d)
+
+The getSupplierById function retrieves a supplier's details based on the id provided in the request URL. It queries the Supplier table for a matching primary key and returns the supplier's information in a JSON response, including fields such as the supplier's name, contact information, and any other associated attributes.
 
 ### POST
 
@@ -166,6 +174,9 @@ The request below creates a product category for the products to identify by:
 ![Screenshot 2024-11-15 235010](https://github.com/user-attachments/assets/e571fc3d-0162-431a-bfca-622cfe301574)
 ![image](https://github.com/user-attachments/assets/682ac0a6-c7db-4181-b894-b02a32324d94)
 
+
+The addProductCategory function allows the creation of multiple product categories from an array of category objects provided in the request body. Each category includes a category_name and category_description. Valid categories are saved to the database, and the response contains a list of successfully created categories with their details.
+
 ### PATCH
 
 The patch request is similar to the post request. It updates existing data. So if an employee wants to modify a product's price, they can do so using price history's patch requests.
@@ -175,6 +186,8 @@ As shown below, this request updates any price's history.
 ![Screenshot 2024-11-15 235140](https://github.com/user-attachments/assets/2431ae0e-c43b-4e04-9401-45a1314fc716)
 ![image](https://github.com/user-attachments/assets/a2702d3f-424a-423d-93e3-bd427f36d239)
 
+The updateProduct function updates a product's details based on the provided id and request body data. It updates fields such as product_name, product_price, description, stock, expiry_date, and id_category. After a successful update, it retrieves the updated product and creates a new entry in the Price_History table to log the updated price with a timestamp. The response includes the updated product details and a confirmation of the price history entry.
+
 ### DELETE
 
 The delete request is quite self-explanatory: it deletes information created by the user. This is the most destructive of all requests and is only employed when necessary.
@@ -183,6 +196,8 @@ Below lies the request to delete any desired user. Use wisely.
 
 ![Screenshot 2024-11-15 235344](https://github.com/user-attachments/assets/0736c0a2-bb76-42cc-adbd-45e2192e0b34)
 ![image](https://github.com/user-attachments/assets/254accd1-f591-4de4-9eba-ee41331fd595)
+
+The deleteUser function deletes a user from the database based on their role. If the user is a client, they can only delete their own account. If the user is an employee, they can delete another user by specifying the user ID in the request. Upon successful deletion, the function returns the number of deleted records, confirming the user was successfully removed.
 
 ### Advanced Controllers
 
@@ -195,12 +210,16 @@ This controller fetches the information of all the products linked in an order.
 ![Screenshot 2024-11-16 010146](https://github.com/user-attachments/assets/1501d4e3-7f98-474d-ab18-32b4a07712e4)
 ![image](https://github.com/user-attachments/assets/6ca61769-3cc0-4122-9044-b50c0578bdfc)
 
+The getProductInfoByOrderId function retrieves all products associated with a specific order based on the id provided in the request URL. It first checks if the order exists, then fetches and returns a JSON response containing the list of products linked to that order, including details such as product names, quantities, and prices.
+
 ### deleteProductFromOrder
 
 This controller deletes any selected products from the order they originate in.
 
 ![Screenshot 2024-11-16 010204](https://github.com/user-attachments/assets/1e464c93-ea25-4a59-8e9e-4dfe8a10d751)
 ![image](https://github.com/user-attachments/assets/97330d29-5e49-4a4a-ac48-69e55f2f1d44)
+
+The deleteProductFromOrder function removes a specific product from an order based on the orderId and productId provided in the request URL. It first verifies the existence of the order and the product within that order. If both are found, it deletes the product from the order. The response confirms the successful removal of the product.
 
 ### getProducts
 
@@ -209,12 +228,16 @@ At first glance, this looks like another get request. But this get request is di
 ![Screenshot 2024-11-16 010310](https://github.com/user-attachments/assets/c433c423-ab8d-4161-aee1-da7acb2f0bc5)
 ![image](https://github.com/user-attachments/assets/63f68cbc-8fd2-4637-96eb-04e1e31c3ba2)
 
+The getProductNamesPrices function retrieves a paginated list of product names and prices based on optional filters provided in the query parameters. It supports filtering by any valid product attribute and returns a JSON response containing the product data, total number of products, current page, and total pages. Each product in the response includes only its name and price.
+
 ### listIngredientsByProductId
 
 This request simply fetches all the ingredients listed in a specific product.
 
 ![Screenshot 2024-11-16 010333](https://github.com/user-attachments/assets/98f3df3e-0497-495c-827e-630efb3f68eb)
 ![image](https://github.com/user-attachments/assets/1585db9d-a69b-459f-b63a-984dc11d3588)
+
+The listIngredientsByProductId function retrieves all ingredients associated with a specific product based on its ID provided in the request URL. It checks if the product exists and, if so, fetches its related ingredients using the getIngredients method. The response contains a JSON array of ingredient details, such as ingredient IDs, names, and quantities.
 
 ### listPriceHistoryByProductId
 
@@ -223,6 +246,8 @@ This request, like the one above, lists the price history for a selected product
 ![Screenshot 2024-11-16 010349](https://github.com/user-attachments/assets/7dbfe7ae-ddda-4799-963f-d9e9ac1fb218)
 ![image](https://github.com/user-attachments/assets/f9a20e2d-16e3-4587-b24e-8a3e910a8818)
 
+The listPriceHistoryByProductId function retrieves the price history for a specific product based on its ID provided in the request URL. If the product exists, it fetches all related price history records from the Price_History table and returns them in a JSON response. The response includes an array of price history entries, each containing details like the product ID, previous prices, and the dates of the changes.
+
 ### listProductsByCategory
 
 This troublesome request fetches all the products inside a selected category.
@@ -230,11 +255,25 @@ This troublesome request fetches all the products inside a selected category.
 ![Screenshot 2024-11-16 010456](https://github.com/user-attachments/assets/fa239f3b-928a-4b5f-87ab-8725fabd6f90)
 ![image](https://github.com/user-attachments/assets/f6854a9d-685b-4cf6-9f5c-e72ac0822dc5)
 
+The listProductsByCategory function retrieves all products associated with a specific category based on the category ID provided in the request URL. If the category exists, it fetches all products linked to it and returns them in a JSON response. The response includes an array of products, with each product's details like its ID, name, price, and any other relevant attributes.
+
 ### listOrdersByUser
 
 And for the final request, we have maybe the most important request for bakery employees: the ability to orders based on their associated client. At first glance, this seems like another get request, but in hindsight, this helps the bakery keep track of the orders and their clients simultaneously. Very important for dealing with many orders at once.
 
 ![Screenshot 2024-11-16 010541](https://github.com/user-attachments/assets/42cbe98d-f4a0-4d5f-8c35-889f17cff18d)
+![image](https://github.com/user-attachments/assets/1fed4ea6-9b98-4993-998d-6487443c5fba)
+
+The listOrdersByUser function retrieves all orders associated with a specific user. Depending on the user's role, it determines the user ID to query. The function fetches orders from the database that belong to this user, including basic user details such as their ID and username. The Postman response includes a JSON object with the list of orders for the specified user, showing order details like the user ID, order date, total price, and status, along with the user's information.
+
+
+## Create Order
+The create order request is crucial in an e-commerce or inventory management system as it allows users to place orders for products. This request handles the creation of new orders, calculates the total price, and associates the order with the user who placed it. 
+![image](https://github.com/user-attachments/assets/142d2b14-68dd-40bd-b16a-35a1881e4fae)
+![Screenshot 2024-11-19 230755](https://github.com/user-attachments/assets/eb9ee285-bda7-46d6-8316-c75d6fd65b85)
+
+The createOrder function processes the request and returns a JSON object containing the details of the newly created orders. Each order in the response includes its ID, user ID, order date, total price, status, pickup date, and the associated products.
+
 
 ## Validations
 
