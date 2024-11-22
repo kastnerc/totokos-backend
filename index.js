@@ -24,7 +24,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // Creation of the tables
-//  database.sync({ force:true })
+// database.sync({ force:true })
 
 // Import of the routes
 app.use('/api/ingredient', ingredientRoute)

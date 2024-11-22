@@ -8,7 +8,13 @@ const Order = database.define('Order', {
         primaryKey: true,
         autoIncrement: true,
     },
-   
+    id_user: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: User,
+            key: 'id_user',
+        },
+    },
     order_date: DataTypes.DATE,
     total_price: DataTypes.DECIMAL,
     status: DataTypes.ENUM('in process', 'ready', 'picked up', 'cancelled'),

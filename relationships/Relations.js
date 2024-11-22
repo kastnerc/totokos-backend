@@ -12,13 +12,13 @@ import Price_History from "../models/Price_History.js";
 // Associations
 User.hasMany(Order, {
     foreignKey: {
-        name: 'userIdUser', // Utilisez le bon nom de la clé étrangère
+        name: 'id_user',
         allowNull: false,
     }
 });
 
 Order.belongsTo(User, {
-    foreignKey: 'userIdUser' // Correspond à la clé étrangère dans la table Orders
+    foreignKey: 'id_user'
 });
 
 

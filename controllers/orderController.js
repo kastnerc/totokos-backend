@@ -44,19 +44,30 @@ export const getOrderById = async (req, res) => {
 }
 
 export const deleteOrder = async (req, res) => {
-    const { id } = req.params
+    // Retrieve the order ID from the request parameters
+    const { id } = req.params;
+
     try {
         // Delete the order where the id matches
-        const order = await Order.destroy({ where: { id_order: id } })
-        res.status(200).json(order)
+        const deletedRows = await Order.destroy({
+            where: { id_order: id }
+        });
+
+        // Check if any rows were deleted
+        if (deletedRows > 0) {
+            res.status(200).json({ message: "Order deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Order not found" });
+        }
     } catch (error) {
-        res.status(400).json({ message: error })
+        // In case of error
+        console.log('Error code:', error);
+        res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const createOrder = async (req, res) => {
     const orders = req.body;
-    const { id: userIdUser } = req.user; // Utilisez userIdUser comme clé étrangère
 
     // Validate input
     if (!Array.isArray(orders) || orders.length === 0) {
@@ -67,11 +78,11 @@ export const createOrder = async (req, res) => {
         const createdOrders = [];
 
         for (const order of orders) {
-            const { products, pickup_date } = order;
+            const { id_user, products, pickup_date } = order;
 
             // Validate required fields
-            if (!Array.isArray(products) || products.length === 0) {
-                console.log("Missing products in order:", order);
+            if (!id_user || !Array.isArray(products) || products.length === 0) {
+                console.log("Missing id_user or products in order:", order);
                 continue;
             }
 
@@ -96,9 +107,9 @@ export const createOrder = async (req, res) => {
                 total_price += productData.product_price * quantity;
             }
 
-            // Create the order with the correct foreign key column
+            // Create the order
             const newOrder = await Order.create({
-                userIdUser, // Utilisez la colonne userIdUser pour l'association
+                id_user,
                 order_date: new Date(),
                 total_price,
                 status: 'in process',
@@ -122,7 +133,7 @@ export const createOrder = async (req, res) => {
 
             createdOrders.push({
                 id_order: newOrder.id_order,
-                userIdUser: newOrder.userIdUser, // Affichez l'ID utilisateur depuis la bonne colonne
+                id_user: newOrder.id_user,
                 order_date: newOrder.order_date,
                 total_price: newOrder.total_price,
                 status: newOrder.status,
@@ -132,7 +143,7 @@ export const createOrder = async (req, res) => {
             });
         }
 
-        res.status(201).json({ data: createdOrders, message: "Orders created successfully", userIdUser });
+        res.status(201).json({ data: createdOrders, message: "Orders created successfully" });
     } catch (error) {
         console.error('Error during order creation:', error);
         res.status(500).json({ message: 'Server error' });
