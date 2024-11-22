@@ -36,7 +36,7 @@ The user table holds all user information and is associated with the order table
 
 Here they are, added to our database in code form:
 
-![Screenshot 2024-11-15 223152](https://github.com/user-attachments/assets/3c60d196-6ca3-42ce-999d-ccb260a0c3ef)
+![image](https://github.com/user-attachments/assets/e11016b2-652d-4fbf-8c14-438fcb227825)
 
 ## Models
 Now that the diagram is correctly implemented, they can be written into the database as models. There are nine in total, reflecting the nine tables in the diagram. Here they are below:
@@ -63,7 +63,7 @@ Yet again another intermediary model, it holds the basic quantity, and unit pric
 
 Quite a hefty model, it contains its date of creation, its total price, its status, which can only be one of the four following: 'in process', 'ready', 'picked up', and 'cancelled'. If a reservation is made, the attribute turns to true, and a pickup date is scheduled to let the employees know of the delayed delivery.
 
-![Screenshot 2024-11-15 204648](https://github.com/user-attachments/assets/183726de-4a46-4d17-b555-f43122d298db)
+![image](https://github.com/user-attachments/assets/4de89cba-8765-49fd-ae23-57dfb8655701)
 
 - ### Price_History.js
 
@@ -269,7 +269,7 @@ The listOrdersByUser function retrieves all orders associated with a specific us
 
 ## Create Order
 The create order request is crucial in an e-commerce or inventory management system as it allows users to place orders for products. This request handles the creation of new orders, calculates the total price, and associates the order with the user who placed it. 
-![image](https://github.com/user-attachments/assets/142d2b14-68dd-40bd-b16a-35a1881e4fae)
+![image](https://github.com/user-attachments/assets/c85a3450-f66b-4976-88b6-05a80d7ede17)
 ![Screenshot 2024-11-19 230755](https://github.com/user-attachments/assets/eb9ee285-bda7-46d6-8316-c75d6fd65b85)
 
 The createOrder function processes the request and returns a JSON object containing the details of the newly created orders. Each order in the response includes its ID, user ID, order date, total price, status, pickup date, and the associated products.
