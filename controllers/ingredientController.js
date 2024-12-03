@@ -133,3 +133,25 @@ export const deleteIngredient = async (req, res) => {
     }
 };
 
+export const getIngredientsBySupplierID = async (req, res) => {
+    const { id } = req.params;
+    const id_supplier = id;
+
+    try {
+        // Fetch ingredients by supplier ID
+        const ingredients = await Ingredient.findAll({
+            where: { id_supplier }
+        });
+
+        // Check if any ingredients were found
+        if (ingredients.length > 0) {
+            res.status(200).json(ingredients);
+        } else {
+            res.status(404).json({ message: "No ingredients found for the given supplier ID" });
+        }
+    } catch (error) {
+        // In case of error
+        console.log('Error code : ' + error);
+        res.status(400).json({ message: error.message });
+    }
+};

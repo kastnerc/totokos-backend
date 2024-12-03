@@ -23,6 +23,10 @@ const User = database.define('user', {
     province: DataTypes.STRING,
     country: DataTypes.STRING,
     postal_code: DataTypes.STRING,
+    image: {
+        type: DataTypes.STRING, // Chemin ou URL de l'image
+        allowNull: true,
+    },
 });
 
 export default User;
