@@ -35,18 +35,19 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const addUser = async (req, res) => {
-    const users = req.body;
-
-    if (!Array.isArray(users) || users.length === 0) {
-        return res.status(400).json({ message: "No users provided or invalid data format." });
-    }
-
     try {
+        const isArray = Array.isArray(req.body); // Vérifie si les données sont un tableau
+        const users = isArray ? req.body : [req.body]; // Normalise en tableau
+
+        if (users.length === 0) {
+            return res.status(400).json({ message: "No users provided or invalid data format." });
+        }
+
         const createdUsers = [];
         for (const user of users) {
             const { password, ...restNewUser } = user;
 
-            // Validate password presence and strength
+            // Vérifiez si le mot de passe est présent et valide
             if (!password) {
                 console.log("Password is missing for user:", user.username);
                 continue;
@@ -58,15 +59,22 @@ export const addUser = async (req, res) => {
 
             const hashedPassword = bcrypt.hashSync(password);
 
-            // Create user in database
-            const result = await User.create({ password: hashedPassword, ...restNewUser });
+            // Vérifiez si une image est présente (form-data)
+            const image = req.file ? req.file.path : null;
+
+            // Créez l'utilisateur dans la base de données
+            const result = await User.create({
+                password: hashedPassword,
+                image, // Ajoutez l'image si elle est présente
+                ...restNewUser,
+            });
             createdUsers.push(result);
         }
 
         res.status(201).json({ data: createdUsers, message: "Users successfully created" });
     } catch (error) {
-        console.log('Error during user creation:', error);
-        res.status(400).json({ message: error.message });
+        console.error('Error during user creation:', error);
+        res.status(500).json({ message: "An error occurred while creating the user", error: error.message });
     }
 };
 

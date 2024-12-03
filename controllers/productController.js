@@ -36,14 +36,37 @@ export const getProductNamesPrices = async (req, res) => {
 };
 
 export const getAllProducts = async (req, res) => {
+    const { page = 1, limit = 10, ...filters } = req.query;
+
     try {
-        // Fetch all products with all attributes
-        const products = await Product.findAll();
-        res.status(200).json(products);
+        const offset = (page - 1) * limit;
+        const where = {};
+
+        for (const [key, value] of Object.entries(filters)) {
+            if (Product.rawAttributes[key]) {
+                where[key] = {
+                    [Op.like]: `%${value}%`
+                };
+            }
+        }
+
+        const result = await Product.findAndCountAll({
+            where,
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+        });
+
+        res.status(200).json({
+            data: result.rows,
+            total: result.count,
+            page: parseInt(page),
+            pages: Math.ceil(result.count / limit)
+        });
+        
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
-}
+};
 
 export const getProductById = async (req, res) => {
     const { id } = req.params;
