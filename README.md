@@ -1,8 +1,6 @@
 # Totoko's Backend - Second summative Assignment
 ### Created and published by Caleb Kastner, Georgio El-Khoury, and Tristan Bastien
 
-![Totokos Temptations Logo Website](https://github.com/calebk5/Web-Client/assets/145488814/710a1527-cb2e-4786-8a07-6891eaf5912f)
-
 ## Introduction
 The following project was created by the same team that developed Totoko's Temptations last semester. The team is consisted of Caleb Kastner, the project manager, Georgio El-Koury, the driver of the project, and Tristan Bastien, the lead creative developer. The three decided to take the same bakery as Totoko's Temptations and create a backend database just as their teacher had asked. They had to make a back-end database, which would be linked with a front-end webpage they will develop later in the semester. 
 
